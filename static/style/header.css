@@ -1,0 +1,81 @@
+/* HEADER */
+
+#header
+{
+    /* aspect-ratio: 1440 / 667; */
+
+    height: 66.7rem;
+
+    padding: 5.1rem 6.9rem;
+
+    background         : linear-gradient(rgba(0, 0, 0, .3) 0%, rgba(0, 0, 0, .3) 100%), url('/static/images/background/header.webp');
+    background-position: center;
+    background-size    : cover;
+    background-repeat  : no-repeat;
+}
+
+#logo
+{
+    width : 18rem;
+    height: 2.5rem;
+}
+
+#header h1
+{
+    margin-bottom: 3rem;
+
+    font-size     : 44px;
+    letter-spacing: .3rem;
+    line-height   : 1.5;
+}
+
+#searchbar
+{
+    gap: 2.4rem;
+
+    max-width: 95.4rem;
+    height   : 7.2rem;
+
+    padding: 1rem;
+
+    border-radius: 1.1rem;
+}
+
+#searchbar input[type="search"]
+{
+    padding-inline: 2.5rem;
+
+    font-size: 1.6rem;
+
+    caret-color: var(--itm);
+}
+
+#searchbar input[type="search"]::placeholder { color: inherit; }
+
+#searchbar input[type="search"]:placeholder-shown + button[type="button"] { visibility: hidden; }
+
+#searchbar button[type="button"] i { width: 1.3rem; }
+
+#searchbar button[type="submit"], #searchbar button[type="submit"] svg  { transition: .22s; }
+
+#searchbar button[type="submit"]
+{
+    aspect-ratio: 1 / 1;
+
+    border-radius: 1rem;
+
+    transition-property: background-color;
+}
+
+#searchbar button[type="submit"]:hover { background-color: var(--prm); }
+
+#searchbar button[type="submit"] i { width: 2.7rem; }
+
+#searchbar button[type="submit"] svg
+{
+    stroke: var(--lgh);
+
+    transition-property: stroke;
+}
+
+#searchbar button[type="submit"]:hover svg { stroke: var(--drk); }
