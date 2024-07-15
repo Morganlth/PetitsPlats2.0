@@ -70,8 +70,7 @@ function birthday()
 }
 ```
 
-Pouvez-vous me dire qu'elle est le **sujet** concerné par ce code ?<br>
-Sans doute que non.
+Qu'elle est le **sujet** dans ce code ?
 
 Voici le même exemple avec un sujet explicite:
 
