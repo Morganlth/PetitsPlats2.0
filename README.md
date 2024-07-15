@@ -52,7 +52,7 @@ Pour bien saisir les concepts abordés dans cette documentation, il faut compren
 Ce modèle de programmation est utilisé en **CSS** et **JavaScript** pour associer une **entité**\* à un **sujet**\*.<br>
 Ceci dans le but d'améliorer la compréhension du code.
 
-> *Le mot **entité**\* inclus tous les concepts, fichiers et composantes des divers langages web.*<br>
+> *Le mot **entité**\* inclut tous les concepts, fichiers et composantes des divers langages web.*<br>
 > *Par exemple une **classe** CSS, une **constante** JavaScript, une **fonction**, etc.*
 
 > *Le **sujet**\* peut aussi être nommé **contexte** ou **thématique**.*
