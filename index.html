@@ -2,7 +2,7 @@
 
 <html
 lang="fr"
-class="o_h_a o_o_a"
+class="o_h_a o_h_o"
 >
     <head>
         <meta
@@ -39,11 +39,11 @@ class="o_h_a o_o_a"
 
     <body>
         <header
-        id="header"
+        id="HEADER"
         class="d_flx f_cl_ max_w_any b_brd"
         >
             <a
-            id="logo"
+            id="LOGO"
             class="d_blc"
             href="/"
             >
@@ -64,18 +64,18 @@ class="o_h_a o_o_a"
                 </h1>
 
                 <form
-                id="searchbar"
-                class="d_flx w_any b_brd b_lgh"
+                id="SEARCHBAR"
+                class="searchbar d_flx w_any b_brd b_lgh brd_r_11"
                 >
                     <input
-                    class="f_1 b_brd c_itm ff_Manrope fw_400"
+                    class="f_1 b_brd c_itm ff_Manrope fs_16 fw_400"
                     type="search"
                     placeholder="Rechercher une recette, un ingrédient, ..."
                     aria-label="Faire une recherche"
                     >
 
                     <button
-                    class="d_flx a_ctr"
+                    class="deleter d_flx a_ctr"
                     type="button"
                     >
                         <i
@@ -100,11 +100,12 @@ class="o_h_a o_o_a"
                     </button>
 
                     <button
-                    class="d_flx j_ctr a_ctr h_any b_drk"
+                    class="sender d_flx j_ctr a_ctr h_any b_drk brd_r_10"
                     type="submit"
                     aria-label="Rechercher"
                     >
                         <i
+                        class="d_flx a_ctr"
                         role="presentation"
                         aria-hidden="true"
                         >
@@ -134,9 +135,44 @@ class="o_h_a o_o_a"
         </header>
         
         <main
-        id="main"
+        id="MAIN"
+        class="b_brd b_itm2"
         >
-            
+            <div
+            id="FILTERS"
+            class="d_flx j_sbt a_ctr c_drk"
+            >
+                <ul
+                class="d_flx f_wrp ff_Manrope fs_16 super_list"
+                ></ul>
+
+                <div
+                class="total ff_Anton fs_21"
+                ></div>
+            </div>
+
+            <ul
+            id="TAGS"
+            class="d_flx f_wrp ff_Manrope fs_14 fw_400 super_list"
+            ></ul>
+
+            <div
+            id="RECIPES"
+            class="d_grd j_sbt"
+            ></div>
         </main>
+
+        <script>
+            {
+                const SCRIPT = document.currentScript
+
+                import('/static/js/pages/page.js').then(({page_init}) =>
+                {
+                    page_init()
+
+                    SCRIPT?.remove()
+                })
+            }
+        </script>
     </body>
 </html>

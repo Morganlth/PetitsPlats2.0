@@ -1,0 +1,7 @@
+/* TAGS */
+
+#TAGS { margin-bottom: 3.4rem; }
+
+#TAGS:has(*) { margin-bottom: 4.3rem; }
+
+#TAGS button { width: 1rem; }

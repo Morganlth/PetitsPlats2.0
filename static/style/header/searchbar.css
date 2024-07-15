@@ -1,0 +1,44 @@
+/* SEARCHBAR */
+
+#SEARCHBAR
+{
+    gap: 2.4rem;
+
+    max-width: 95.4rem;
+    height   : 7.2rem;
+
+    padding: 1rem;
+}
+
+#SEARCHBAR input[type="search"]
+{
+    padding-inline: 2.5rem;
+
+    caret-color: var(--itm);
+}
+
+#SEARCHBAR input[type="search"]::placeholder { color: inherit; }
+
+#SEARCHBAR .deleter i { width: 1.3rem; }
+
+#SEARCHBAR .sender, #SEARCHBAR .sender svg  { transition: .22s; }
+
+#SEARCHBAR .sender
+{
+    aspect-ratio: 1 / 1;
+
+    transition-property: background-color;
+}
+
+#SEARCHBAR .sender:hover { background-color: var(--prm); }
+
+#SEARCHBAR .sender i { width: 2.7rem; }
+
+#SEARCHBAR .sender svg
+{
+    stroke: var(--lgh);
+
+    transition-property: stroke;
+}
+
+#SEARCHBAR .sender:hover svg { stroke: var(--drk); }

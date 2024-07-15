@@ -1,0 +1,9 @@
+/* IMPORTS */
+
+@import url('./main/filters.css');
+@import url('./main/tags.css   ');
+@import url('./main/recipes.css');
+
+/* MAIN */
+
+#MAIN { padding: 0 10rem 20rem; }
