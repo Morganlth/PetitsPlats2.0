@@ -1,57 +1,28 @@
-/*----------------------------------------------- #||--tags--|| */
+/* #||__[tags]__|| */
 
 
-// #\-IMPORTS-\
+// #\_IMPORTS_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-    import Filter from '../templates/Filter.js'
-    import Tag    from '../templates/Tag.js'
-
-    // --SCSS
-
-//=======@COMPONENTS|
-
-    // --*
+    // __JS
+    import Filter from '../components/Filter.js'
+    import Tag    from '../components/Tag.js'
 
 
-// #\-EXPORTS-\
+// #\_CONSTANTES_\
 
-    // --THIS
-    export function tags_init() { tags_set() }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
+    // __THIS
     const
     TAGS = document.getElementById('TAGS')
     ,
     TAGS_TAGS = new Map()
 
 
-// #\-VARIABLES-\
+// #\_FUNCTIONS_\
 
-    // --THIS
-
-
-// #\-FUNCTIONS-\
-
-    // --SET
+    // __SET
     function tags_set() { Filter.__filter_$STORE.subscribe(tags_update) }
 
-    // --GET
-
-    // --UPDATES
+    // __UPDATES
     function tags_update(ref, remove = false, tag = '')
     {
         if (remove)
@@ -62,16 +33,8 @@
         else TAGS_TAGS.set(ref, new Tag(TAGS, ref, tag))
     }
 
-    // --TESTS
 
-    // --DESTROY
+// #\_EXPORTS_\
 
-
-//=======@EVENTS|
-
-    // --*
-
-
-//=======@UTILS|
-
-    // --*
+    // __THIS
+    export function tags_init() { tags_set() }

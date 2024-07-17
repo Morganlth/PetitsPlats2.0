@@ -1,9 +1,13 @@
-/* IMPORTS */
+/* #||__[header]__|| */
 
-@import url('./header/logo.css     ');
-@import url('./header/searchbar.css');
 
-/* HEADER */
+/* #\_IMPORTS_\ */
+
+    /* __MODULES */
+    @import url('./header/logo.css     ');
+    @import url('./header/searchbar.css');
+
+/* #\_THIS_\ */
 
 #HEADER
 {

@@ -1,66 +1,25 @@
-/*----------------------------------------------- #||--searchbar--|| */
+/* #||__[searchbar]__|| */
 
 
-// #\-IMPORTS-\
+// #\_IMPORTS_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-    import Searchbar from '../templates/Searchbar.js'
-
-    // --SCSS
-
-//=======@COMPONENTS|
-
-    // --*
+    // __JS
+    import SearchBar from '../components/SearchBar.js'
 
 
-// #\-EXPORTS-\
+// #\_CONSTANTES_\
 
-    // --THIS
-    export function searchbar_init() { searchbar_set() }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
+    // __THIS
     const SEARCHBAR = document.getElementById('SEARCHBAR')
 
-    // --INSIDE
+
+// #\_FUNCTIONS_\
+
+    // __SET
+    function searchbar_set() { new SearchBar().searchbar_set(SEARCHBAR) }
 
 
-// #\-VARIABLES-\
+// #\_EXPORTS_\
 
-    // --THIS
-
-    // --INSIDE
-
-
-// #\-FUNCTIONS-\
-
-    // --SET
-    function searchbar_set() { new Searchbar().searchbar_set(SEARCHBAR) }
-
-    // --GET
-
-    // --UPDATES
-
-    // --TESTS
-
-
-//=======@EVENTS|
-
-    // --*
-
-
-//=======@UTILS|
-
-    // --*
+    // __THIS
+    export function searchbar_init() { searchbar_set() }

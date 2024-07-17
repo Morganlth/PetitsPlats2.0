@@ -1,57 +1,23 @@
-/*----------------------------------------------- #||--recipes--|| */
+/* #||__[recipes]__|| */
 
 
-// #\-IMPORTS-\
+// #\_IMPORTS_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-    import Recipe   from '../templates/Recipe.js'
-    import Filter   from '../templates/Filter.js'
+    // __JS
+    import Recipe   from '../components/Recipe.js'
+    import Filter   from '../components/Filter.js'
     import data_get from '../utils/data.js'
 
-    // --SCSS
 
-//=======@COMPONENTS|
+// #\_CONSTANTES_\
 
-    // --*
-
-
-// #\-EXPORTS-\
-
-    // --THIS
-    export function recipes_init() { recipes_set() }
-
-    export async function recipes_update(s = '')
-    {
-        const LENGTH = s.length
-
-        if (LENGTH < recipes_LAST_LENGTH) recipes_resetVars()
-
-        recipes_CURRENT_WORDS = recipes_getWords(s)
-        recipes_LAST_LENGTH   = LENGTH
-    
-        recipes_sort()
-    }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
+    // __THIS
     const RECIPES = document.getElementById('RECIPES')
 
 
-// #\-VARIABLES-\
+// #\_VARIABLES_\
 
-    // --THIS
+    // __THIS
     let
     recipes_RECIPES         = new Set(),
     recipes_CURRENT_RECIPES = new Set(),
@@ -61,9 +27,9 @@
     recipes_LAST_LENGTH = 0
 
 
-// #\-FUNCTIONS-\
+// #\_FUNCTIONS_\
 
-    // --SET
+    // __SET
     async function recipes_set()
     {
         if (!(RECIPES instanceof HTMLElement)) return
@@ -76,7 +42,7 @@
 
     async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => new Recipe(RECIPES, r))) }
 
-    // --GET
+    // __GET
     function recipes_getWords(s = '')
     {
         const WORDS = new Set()
@@ -86,7 +52,7 @@
         return WORDS
     }
 
-    // --UPDATES
+    // __UPDATES
     function recipes_updateDisplay(recipes = [], hidden = false)
     {
         const ACTION = hidden ? 'add' : 'remove'
@@ -103,12 +69,7 @@
         recipes_sort()
     }
 
-    // --TESTS
-
-
-//=======@UTILS|
-
-    // --*
+    // __UTILS
     function recipes_resetVars() { recipes_CURRENT_RECIPES = new Set(recipes_RECIPES) }
 
     function recipes_sort()
@@ -130,4 +91,22 @@
         recipes_updateDisplay(recipes_CURRENT_RECIPES)
         
         Recipe.__recipe_$STORE.set(recipes_CURRENT_RECIPES)
+    }
+
+
+// #\_EXPORTS_\
+
+    // __THIS
+    export function recipes_init() { recipes_set() }
+
+    export async function recipes_update(s = '')
+    {
+        const LENGTH = s.length
+
+        if (LENGTH < recipes_LAST_LENGTH) recipes_resetVars()
+
+        recipes_CURRENT_WORDS = recipes_getWords(s)
+        recipes_LAST_LENGTH   = LENGTH
+    
+        recipes_sort()
     }

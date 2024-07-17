@@ -1,4 +1,7 @@
-/* FILTERS */
+/* #||__[filters]__|| */
+
+
+/* #\_THIS_\ */
 
 #FILTERS { padding-block: 2.1rem; }
 
@@ -16,7 +19,7 @@
 
 #FILTERS .controler[aria-pressed="true"] + .wrapper
 {
-    clip-path: polygon(0 2.1rem, 100% 2.1rem, 100% var(--filter_clipY, 100%), 0 var(--filter_clipY, 100%));
+    clip-path: polygon(0 2.1rem, 100% 2.1rem, 100% var(--filter_clip_y, 100%), 0 var(--filter_clip_y, 100%));
 }
 
 #FILTERS .controler[aria-pressed="false"] + .wrapper::before
@@ -42,7 +45,7 @@
     left    : 0;
     z-index : -1;
 
-    transform: translateY(var(--background_translateY));
+    transform: translateY(var(--background_translate_y));
 
     width : 100%;
     height: 100%;
@@ -54,7 +57,7 @@
 
 #FILTERS .container { padding-top: 5.3rem; }
 
-#FILTERS :is(.searchbar, .option>button) { padding-inline: 1.6rem; }
+#FILTERS :is(.searchbar, .option) { padding-inline: 1.6rem; }
 
 #FILTERS .searchbar { padding-bottom: 1.5rem; }
 
@@ -77,33 +80,33 @@
 
 #FILTERS .sender>i { width: 1.35rem; }
 
-#FILTERS .options :is(.whitespace, .option>button) { flex-shrink: 0; }
+#FILTERS .options :is(.whitespace, .option) { flex-shrink: 0; }
 
 #FILTERS .whitespace { order: 1; }
 
 #FILTERS .filter :has(.option.active) .whitespace { height: 1.7rem; } /* .filter est important pour encapsuler le selecteur autour d'un filtre en particulier */
 
-#FILTERS .option>button
+#FILTERS .option
 {
     height: 3.7rem;
 
     text-align: left;
 }
 
-#FILTERS .option>button:hover, #FILTERS .option.active>button { background-color: var(--prm); }
+#FILTERS .option:hover, #FILTERS .option.active { background-color: var(--prm); }
 
-#FILTERS .option.active :is(>button, .cross) { transition: .16s ease-in; }
+#FILTERS .option.active, #FILTERS .option.active .cross { transition: .16s ease-in; }
 
-#FILTERS .option:not(.active)>button { order: 2; }
+#FILTERS .option:not(.active) { order: 2; }
 
-#FILTERS .option.active>button
+#FILTERS .option.active
 {
     order: 0;
 
     transition-property: font-weight;
 }
 
-#FILTERS .option.active>button:hover { font-weight: 700; }
+#FILTERS .option.active:hover { font-weight: 700; }
 
 #FILTERS .option span { text-overflow: ellipsis; }
 
@@ -114,4 +117,4 @@
     transition-property: opacity;
 }
 
-#FILTERS .option.active>button:not(:hover) .cross { opacity: 0; }
+#FILTERS .option.active:not(:hover) .cross { opacity: 0; }

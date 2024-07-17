@@ -1,67 +1,21 @@
-/*----------------------------------------------- #||--Tree--|| */
+/* #||__[Tree]__|| */
 
-
-/*-- #|-CLASS-| --*/
 
 class Tree
 {
 
-// #\-STATICS-\
+// #\_PROPS_\
 
-    // --*
-
-
-// #\-PRIVATES-\
-
-    // --THIS
+    // __PRIVATES
     #tree_TREE = new Map()
 
 
-// #\-PUBLICS-\
+// #\_FUNCTIONS_\
 
-    // --THIS
-
-
-// #\-CONSTRUCTOR-\
-
-    // --THIS
-    // constructor () {}
-
-
-// #\-FUNCTIONS-\
-
-//=======@SETTER|
-
-    // --*
-
-
-//=======@GETTER|
-
-    // --*
+    // __GETTER
     get tree_TREE() { return this.#tree_TREE }
 
-
-//=======@LIFE|
-
-    // --SET
-
-    // --GET
-
-    // --UPDATES
-
-    // --TESTS
-
-    // --DESTROY
-
-
-//=======@EVENTS|
-
-    // --*
-
-
-//=======@UTILS|
-
-    // --*
+    // __UTILS
     tree_addWords(words = [], ref)
     {
         for (const WORD of words)
@@ -97,18 +51,7 @@ class Tree
 }
 
 
-// #\-IMPORTS-\
+// #\_EXPORTS_\
 
-    // --ENV
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-
-
-// #\-EXPORTS-\
-
-    // --THIS
+    // __THIS
     export default Tree

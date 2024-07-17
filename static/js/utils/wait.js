@@ -1,35 +1,14 @@
-/*----------------------------------------------- #||--wait--|| */
+/* #||__[wait]__|| */
 
 
-// #\-IMPORTS-\
+// #\_EXPORTS_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-
-    // --SCSS
-
-//=======@COMPONENTS|
-
-    // --*
-
-
-// #\-EXPORTS-\
-
-    // --THIS
-    export function wait_debounce(f = () => {}, n = 0)
+    // __THIS
+    export function wait_debounce(f = () => void 0, frame = 0)
     {
         const
-        C = this,
-        D = wait_getDelay(n)
+        CONTEXT = this,
+        DELAY   = wait_getDelay(frame)
 
         let t
     
@@ -37,92 +16,66 @@
         {
             clearTimeout(t)
 
-            t = setTimeout(f.bind(C, ...arguments), D)
+            t = setTimeout(f.bind(CONTEXT, ...arguments), DELAY)
         }
 
-        debounce.cb_name = f.name
+        debounce.wait_NAME = f.name
 
         return debounce
     }
 
-    export function wait_throttle(f = () => {}, n = 0, td = 0)
-    {
-        const
-        C = this,
-        D = wait_getDelay(n)
+    // export function wait_throttle(f = () => void 0, frame = 0, bounce = false)
+    // {
+    //     const
+    //     CONTEXT = this,
+    //     DELAY   = wait_getDelay(frame)
     
-        let
-        l = +new Date()
-        ,
-        throttle
+    //     let
+    //     last = +new Date()
+    //     ,
+    //     throttle
 
-        if (td)
-        {
-            const TD = wait_getDelay(td)
+    //     if (bounce)
+    //     {
+    //         const BOUNCE_DELAY = wait_getDelay(frame + 1)
     
-            let t
+    //         let t
     
-            throttle = function ()
-            {
-                const N = +new Date()
+    //         throttle = function ()
+    //         {
+    //             const NOW = +new Date()
 
-                clearTimeout(t)
+    //             clearTimeout(t)
 
-                N > l + D
-                ? (f.apply(C, arguments),
-                  l = N)
-                : t = setTimeout(() =>
-                {
-                    f.apply(C, arguments)
+    //             NOW > last + DELAY
+    //             ? (f.apply(CONTEXT, arguments), last = NOW)
+    //             : t = setTimeout(() =>
+    //             {
+    //                 f.apply(CONTEXT, arguments)
 
-                    l = +new Date()
-                }, TD)
-            }
-        }
-        else
-        {
-            throttle = function ()
-            {
-                const N = +new Date()
+    //                 last = +new Date()
+    //             },
+    //             BOUNCE_DELAY)
+    //         }
+    //     }
+    //     else
+    //     {
+    //         throttle = function ()
+    //         {
+    //             const NOW = +new Date()
 
-                if (N > l + D)
-                {
-                    f.apply(C, arguments)
+    //             if (NOW > last + DELAY)
+    //             {
+    //                 f.apply(CONTEXT, arguments)
 
-                    l = N
-                }
-            }
-        }
+    //                 last = NOW
+    //             }
+    //         }
+    //     }
 
-        throttle.cb_name = f.name
+    //     throttle.wait_NAME = f.name
 
-        return throttle
-    }
+    //     return throttle
+    // }
 
-    export function wait_getDelay(n = 0) { return 1000 / 60 * n }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
-
-
-// #\-VARIABLES-\
-
-    // --THIS
-
-
-// #\-FUNCTIONS-\
-
-    // --SET
-
-    // --GET
-
-    // --UPDATES
-
-    // --TESTS
-
-
-//=======@UTILS|
-
-    // --*
+    export function wait_getDelay(frame = 0) { return 1000 / 60 * frame }

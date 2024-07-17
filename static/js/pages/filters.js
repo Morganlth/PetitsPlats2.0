@@ -1,55 +1,27 @@
-/*----------------------------------------------- #||--filters--|| */
+/* #||__[filters]__|| */
 
 
-// #\-IMPORTS-\
+// #\_IMPORTS_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-    import Recipe from '../templates/Recipe.js'
-
-    // --SCSS
-
-//=======@COMPONENTS|
-
-    // --*
+    // __JS
+    import Filter from '../components/Filter.js'
+    import Recipe from '../components/Recipe.js'
 
 
-// #\-EXPORTS-\
+// #\_CONSTANTES_\
 
-    // --THIS
-    export function filters_init() { filters_set() }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
+    // __THIS
     const FILTERS = document.getElementById('FILTERS')
 
-    // --INSIDE
+    // __INSIDE
     const UL = FILTERS?.querySelector('ul')
 
     const TOTAL = FILTERS?.querySelector('.total')
 
 
-// #\-VARIABLES-\
+// #\_FUNCTIONS_\
 
-    // --THIS
-    
-    // --INSIDE
-
-
-// #\-FUNCTIONS-\
-
-    // --SET
+    // __SET
     function filters_set()
     {
         if (!(UL instanceof HTMLElement)) return
@@ -61,20 +33,14 @@
     
     function total_set() { Recipe.__recipe_$STORE.subscribe(total_update) }
 
-    // --GET
+    // __UPDATES
+    function total_update(s) { if (TOTAL) TOTAL.textContent = (s.size ?? 0) + ' recettes' }
 
-    // --UPDATES
-    function total_update(s) { if (TOTAL) TOTAL.innerText = (s.size ?? 0) + ' recettes'  }
-
-    // --TESTS
-
-
-//=======@UTILS|
-
-    // --*
+    // __UTILS
+    function filter_iter() { for (const FILTER of Recipe.__recipe_FILTERS) new Filter(UL, FILTER) }
 
 
-//=======@UTILS|
+// #\_EXPORTS_\
 
-    // --*
-    function filter_iter() { for (const [REF, FILTER] of Recipe.__recipe_FILTERS) FILTER.filter_build(UL, REF.ref) }
+    // __THIS
+    export function filters_init() { filters_set() }

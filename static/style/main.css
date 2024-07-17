@@ -1,8 +1,12 @@
-/* IMPORTS */
+/* #||__[main]__|| */
 
-@import url('./main/filters.css');
-@import url('./main/tags.css   ');
-@import url('./main/recipes.css');
+
+/* #\_IMPORTS_\ */
+
+    /* __MODULES */
+    @import url('./main/filters.css');
+    @import url('./main/tags.css   ');
+    @import url('./main/recipes.css');
 
 /* MAIN */
 

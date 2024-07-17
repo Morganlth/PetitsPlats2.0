@@ -1,30 +1,31 @@
-/*
-    events management
-*/
+/* #||__[Events]__|| */
 
 
-/*-- #|-CLASS-| --*/
+// #\_IMPORTS_\
+
+    // __JS
+    import { wait_debounce } from '../utils/wait.js'
+
 
 class Events
 {
 
-// #\-PRIVATES-\
+// #\_PROPS_\
 
-    // --THIS
-    #events_EVENTS = ['resize', 'click', 'keydown']
-
+    // __PRIVATES
+    #events_EVENTS   = ['resize', 'click', 'keydown']
     #events_MANAGERS = new Map()
 
 
-// #\-CONSTRUCTOR-\
+// #\_CONSTRUCTOR_\
 
-    // --THIS
+    // __THIS
     constructor () { this.#events_set() }
 
 
-//=======@LIFE|
+// #\_FUNCTIONS_\
 
-    // --SET
+    // __SET
     #events_set()
     {
         this.#events_setBinding()
@@ -42,24 +43,17 @@ class Events
 
     #events_setEvents(event, callback) { window.addEventListener(event, callback ?? this.#events_call.bind(this.#events_MANAGERS.get(event))) }
 
-    // --TESTS
+    // __EVENTS
+    events_eResize() { this.#events_call.call(this.#events_MANAGERS.get('resize')) }
+
+    // __UTILS
+    async #events_call() { for (const CALLBACK of this) CALLBACK(...arguments) } // this === Array
+
     #events_testArgs(events) { return events instanceof Object }
 
     #events_testStringEvent(event = '') { return this.#events_EVENTS.includes(event) }
 
     #events_testCallback(callback) { return callback instanceof Function }
-
-    
-//=======@EVENTS|
-
-    // --*
-    events_eResize() { this.#events_call.call(this.#events_MANAGERS.get('resize')) }
-
-
-//=======@UTILS|
-
-    // --*
-    async #events_call() { for (const CALLBACK of this) CALLBACK(...arguments) } // this === Array
 
     events_add(events = {}, target)
     {
@@ -121,13 +115,7 @@ class Events
 }
 
 
-// #\-IMPORTS-\
+// #\_EXPORTS_\
 
-    // --JS
-    import { wait_debounce } from '../utils/wait.js'
-
-
-// #\-EXPORTS-\
-
-    // --THIS
+    // __THIS
     export default new Events()

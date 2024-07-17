@@ -1,63 +1,31 @@
-/*----------------------------------------------- #||--str--|| */
+/* #||__[str]__|| */
 
 
-// #\-IMPORTS-\
+// #\_IMPORTS_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
+    // __JS
     import { CONFIG_WORD_MIN_LENGTH } from '../config.js'
 
-    // --SCSS
 
-//=======@COMPONENTS|
+// #\_CONSTANTES_\
 
-    // --*
+    // __THIS
+    const STR_COMPRESSED_REGEX = new RegExp(`[^\\w\\s]|\\b\\w{1,${CONFIG_WORD_MIN_LENGTH - 1}}\\b`, 'gm')
 
 
-// #\-EXPORTS-\
+// #\_EXPORTS_\
 
-    // --THIS
+    // __THIS
     export function str_normalize(s = '') { return s?.normalize('NFD').replace(/[\u0300-\u036f]/g, '') }
 
-    export function str_compressed(s = '') // optimise les textes à analiser en supprimant les petis mots, les accents, les majuscules, les signes de ponctuation et les caractères spéciaux
+    export function str_compressed(value) // optimise les textes à analiser en supprimant les petis mots, les accents, les majuscules, les signes de ponctuation et les caractères spéciaux
     {
-        if (s instanceof Array) s = s.reduce((s, u) => s += u + ' ', '')
-
-        return str_normalize(s ?? '').replace(STR_COMPRESSED_REGEXP, '').replace(/\s{2,}/gm, ' ').trim().toLowerCase()
+        return str_normalize((value instanceof Array
+        ?  value.reduce((acc, s) => acc += s + ' ', '')
+        :  value)
+        ?? '')
+        .replace(STR_COMPRESSED_REGEX, '')
+        .replace(/\s{2,}/gm, ' ')
+        .trim()
+        .toLowerCase()
     }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
-    const STR_COMPRESSED_REGEXP = new RegExp(`[^\\w\\s]|\\b\\w{1,${CONFIG_WORD_MIN_LENGTH - 1}}\\b`, 'gm')
-
-
-// #\-VARIABLES-\
-
-    // --THIS
-
-
-// #\-FUNCTIONS-\
-
-    // --SET
-
-    // --GET
-
-    // --UPDATES
-
-    // --TESTS
-
-
-//=======@UTILS|
-
-    // --*

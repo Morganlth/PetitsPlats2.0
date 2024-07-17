@@ -1,84 +1,38 @@
-/*----------------------------------------------- #||--Ref--|| */
 
 
-/*-- #|-CLASS-| --*/
+/* #||__[Ref]__|| */
+
 
 class Ref
 {
 
-// #\-STATICS-\
+// #\_PROPS_\
 
-    // --*
-
-
-// #\-PRIVATES-\
-
-    // --THIS
+    // __PRIVATES
     #ref = 0
 
 
-// #\-PUBLICS-\
+// #\_CONSTRUCTOR_\
 
-    // --THIS
-
-
-// #\-CONSTRUCTOR-\
-
-    // --THIS
-    constructor (ref) { this.#ref = ref }
+    // __THIS
+    constructor () { this.#ref_set(...arguments) }
 
 
-// #\-FUNCTIONS-\
+// #\_FUNCTIONS_\
 
-//=======@SETTER|
-
-    // --*
-
-
-//=======@GETTER|
-
-    // --*
+    // __GETTER
     get ref() { return this.#ref }
 
+    // __SET
+    #ref_set() { this.#ref_setVars(...arguments) }
 
-//=======@LIFE|
-
-    // --SET
-
-    // --GET
-
-    // --UPDATES
-
-    // --TESTS
-
-    // --DESTROY
-
-
-//=======@EVENTS|
-
-    // --*
-
-
-//=======@UTILS|
-
-    // --*
+    #ref_setVars(ref) { this.#ref = ref }
 
 
 }
 
 
-// #\-IMPORTS-\
+// #\_EXPORTS_\
 
-    // --ENV
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-
-
-// #\-EXPORTS-\
-
-    // --THIS
+    // __THIS
     export default Ref

@@ -1,53 +1,33 @@
-/*----------------------------------------------- #||--Tag--|| */
+/* #||__[Tag]__|| */
 
 
-/*-- #|-CLASS-| --*/
+// #\_IMPORTS_\
+
+    // __JS
+    import Filter from './Filter.js'
+
 
 class Tag
 {
 
-// #\-STATICS-\
+// #\_PROPS_\
 
-    // --*
+    // __PRIVATES
     #tag
-
     #tag_REF
-
 
     #deleter
 
 
-// #\-PRIVATES-\
+// #\_CONSTRUCTOR_\
 
-    // --THIS
-
-
-// #\-PUBLICS-\
-
-    // --THIS
-
-
-// #\-CONSTRUCTOR-\
-
-    // --THIS
+    // __THIS
     constructor () { this.#tag_set(...arguments) }
 
 
-// #\-FUNCTIONS-\
+// #\_FUNCTIONS_\
 
-//=======@SETTER|
-
-    // --*
-
-
-//=======@GETTER|
-
-    // --*
-
-
-//=======@LIFE|
-
-    // --SET
+    // __SET
     #tag_set(parent, ref, tag = '')
     {
         this.#tag_setHTML(parent, tag)
@@ -82,7 +62,7 @@ class Tag
 
     #deleter_setEvents() { this.#deleter?.addEventListener('click', this.deleter_eClick) }
 
-    // --GET
+    // __GET
     static __tag_getHTML(tag)
     {
         return `
@@ -120,11 +100,7 @@ class Tag
         `
     }
 
-    // --UPDATES
-
-    // --TESTS
-
-    // --DESTROY
+    // __DESTROY
     tag_destroy()
     {
         this.#deleter_destroy()
@@ -137,34 +113,14 @@ class Tag
 
     #deleter_destroyEvents() { this.#deleter?.removeEventListener('click', this.deleter_eClick) }
 
-
-//=======@EVENTS|
-
-    // --*
+    // __EVENTS
     deleter_eClick() { Filter.__filter_$STORE.update(this.#tag_REF, true) }
-
-
-//=======@UTILS|
-
-    // --*
 
 
 }
 
 
-// #\-IMPORTS-\
+// #\_EXPORTS_\
 
-    // --ENV
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-    import Filter from './Filter.js'
-
-
-// #\-EXPORTS-\
-
-    // --THIS
+    // __THIS
     export default Tag

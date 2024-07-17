@@ -1,55 +1,13 @@
-/*----------------------------------------------- #||--data--|| */
+/* #||__[data]__|| */
 
 
-// #\-IMPORTS-\
+// #\_VARIABLES_\
 
-    // --ENV
-
-    // --DATA
-
-    // --NODE
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-
-    // --SCSS
-
-//=======@COMPONENTS|
-
-    // --*
-
-
-// #\-EXPORTS-\
-
-    // --THIS
-    export default async function data_get() { return data_RECIPES ??= (await fetch('/static/json/recipes.json'))?.json() ?? [] }
-
-
-// #\-CONSTANTES-\
-
-    // --THIS
-
-
-// #\-VARIABLES-\
-
-    // --THIS
+    // __THIS
     let data_RECIPES // CACHE
 
 
-// #\-FUNCTIONS-\
+// #\_EXPORTS_\
 
-    // --SET
-
-    // --GET
-
-    // --UPDATES
-
-    // --TESTS
-
-
-//=======@UTILS|
-
-    // --*
+    // __THIS
+    export default async function data_get() { return data_RECIPES ??= (await fetch('/static/json/recipes.json'))?.json() ?? [] }

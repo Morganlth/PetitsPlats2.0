@@ -9,11 +9,13 @@ Cette documentation décrit et argumente le code de @morganlth.
 
 1. [**Subject Programming**](#le-subject-programming)
 2. [**Le Nommage**](#le-nommage)
-    1. [**SCREAMING_SNAKE_CASE**](#le-screaming-snake-case)
-    2. [**camelCase**](#le-camel-case)
-    3. [**snake_case**](#le-snake-case)
-    4. [**subject_SCREAMING_SNAKE_CASE**](#le-subject-screaming-snake-case)
-    5. [**subject_camelCase**](#le-subject-camel-case)
+    1. [**Les Symboles**](#les-symboles)
+    2. [**Les Syntaxes**](#les-syntaxes)
+        1. [**SCREAMING_SNAKE_CASE**](#le-screaming-snake-case)
+        2. [**camelCase**](#le-camel-case)
+        3. [**snake_case**](#le-snake-case)
+        4. [**subject_SCREAMING_SNAKE_CASE**](#le-subject-screaming-snake-case)
+        5. [**subject_camelCase**](#le-subject-camel-case)
 3. [**Les Schémas**](#les-schémas)
 4. [**Le CSS**](#le-css) <sup>`[css]`</sup>
     1. [**Les Schémas**](#les-schémas-css)
@@ -23,8 +25,8 @@ Cette documentation décrit et argumente le code de @morganlth.
     3. [**Les Sélécteurs**](#les-sélecteurs)
         1. [**ID**](#sélecteur-par-id)
         2. [**Classe**](#sélecteur-par-classe)
-        3. [**Classe Utilitaire**](#sélecteur-par-classe-utilitaire)
-        4. [**Super Classe**](#sélecteur-par-super-classe)
+        3. [**Super Classe**](#sélecteur-par-super-classe)
+        4. [**Classe Utilitaire**](#sélecteur-par-classe-utilitaire)
 5. [**Le JavaScript**](#le-javascript) <sup>`[js]`</sup>
     1. [**Intégration**](#intégration-javascript)
     2. [**Les Schémas**](#les-schémas-javascript)
@@ -93,9 +95,11 @@ Dans cet exemple, pour chaque entité (fichier, constante, variable, fonction) l
 
 Pour ceux qui auront des doutes sur ce modèle, en langue une phrase se construit toujours avec un sujet (sauf infinitif et exception) car **il** n'est pas négligeable.
 
-> *Un fichier **.css** et **.js** aura **toujours un sujet** défini par son nom (ex: dans **cat.css** le sujet est **cat**).*
+> *Un fichier CSS ou javaScript aura **toujours un sujet principal** défini par son nom (ex: dans **cat.css** le sujet principal est **cat**).*
 
 > *Chaque entité à un sujet **indépendant** (2 entités dans un même fichier n'auront pas forcément le même sujet).*
+
+> *Dans une `function` ou méthode de `class` JavaScript, les **arguments** et autres **entités** n'ont généralement pas de sujet explicite car ceux-ci héritent du sujet de la `function` / méthode.*
 
 <br>
 
@@ -103,6 +107,54 @@ Pour ceux qui auront des doutes sur ce modèle, en langue une phrase se construi
 <sup>`[html]`</sup> <sup>`[css]`</sup> <sup>`[js]`</sup>
 
 ## **Sommaire**
+
+1. [**Les Symboles**](#les-symboles)
+2. [**Les Syntaxes**](#les-syntaxes)
+
+<br>
+
+> *Le nommage inclut les fichiers HTML, CSS et JavaScript.*
+
+<br>
+
+## **Les Symboles**
+<sup>`[js]`</sup>
+
+Il n'est pas rare dans le code, notamment dans les `function` de retrouver de simples caractères comme **argument** ou **variable**.
+
+Ceux-ci sont appelés **symboles**, en voici les plus communs:
+
+* "**s**" symbole de `String`
+* "**n**" symbole de `Number`
+* "**b**" symbole de `Boolean`
+* "**f**" symbole de `Function`
+* "**e**" symbole de `Event` ou `HTMLElement`
+* "**t**" symbole de **time** (en ms)
+* "**l**" symbole de **length**
+
+<br>
+
+Un symbole à comme avantage de réduire la taille du code sans pour autant le rendre illisible.<br>
+Généralement ceux-ci n'ont pas de sujet et représentent une valeur typée évidente.<br>
+Parfois ils seront accompagnés d'un **indice** pour différencier les **entités** de même type.
+
+Exemple:
+
+```js
+function math_add(n1, n2) { return n1 + n2 }
+```
+
+Dans cet exemple, avec le [**Subject Programming**](#le-subject-programming) on comprend aisément le but de cette fonction: "**une addition mathématique de deux nombres**".
+
+> *Un **symbole** associé à une constante sera écrit en **MAJUSCULE**.*
+
+> *Ils sont généralement utilisés dans les **fonctions utilitaires**.*
+
+<br>
+
+## **Les Syntaxes**
+
+Dans le code, divers syntaxes sont utilisées pour améliorer la lecture:
 
 1. [**SCREAMING_SNAKE_CASE**](#le-screaming-snake-case)
 2. [**camelCase**](#le-camel-case)
@@ -112,11 +164,7 @@ Pour ceux qui auront des doutes sur ce modèle, en langue une phrase se construi
 
 <br>
 
-> *Le nommage inclut les fichiers **.html**, **.css** et **.js**.*
-
-<br>
-
-## **Le Screaming Snake Case**
+## Le Screaming Snake Case
 <sup>`[html]`</sup> <sup>`[css]`</sup> <sup>`[js]`</sup>
 
 Le **SCREAMING_SNAKE_CASE** est une notation dans laquelle les mots sont en **MAJUSCULES** et séparés d'**underscore** `_`.
@@ -128,7 +176,7 @@ Le **SCREAMING_SNAKE_CASE** est une notation dans laquelle les mots sont en **MA
 Les **entités** concernées sont uniques et immuables:
 
 * `id` HTML
-* Id CSS
+* [**Id**](#sélecteur-par-id) CSS
 * `const` JavaScript
 
 <br>
@@ -152,7 +200,7 @@ const CONTAINER = document.getElementById('CONTAINER')
 
 <br>
 
-## **Le Camel Case**
+## Le Camel Case
 <sup>`[html]`</sup> <sup>`[css]`</sup> <sup>`[js]`</sup>
 
 Le **camelCase** est une forme dans laquelle chaque mot au milieu de la phrase commence par une **MAJUSCULE**, sans espace ni ponctuation.
@@ -164,8 +212,9 @@ Le **camelCase** est une forme dans laquelle chaque mot au milieu de la phrase c
 Les **entités** concernées sont:
 
 * `class` HTML
-* Classe CSS
-* Les propriétés d'`Objet` JavaScript
+* [**Classe**](#sélecteur-par-classe) CSS
+* Les **propriétés** d'`Objet` JavaScript
+* Les **arguments** des `function` et **méthodes**
 
 <br>
 
@@ -186,11 +235,13 @@ class="myContainer"
 {
     myContainer: document.querySelector('.myContainer')
 }
+
+function mycontainer_set(myContainer) { /* ... */ }
 ```
 
 <br>
 
-## **Le Snake Case**
+## Le Snake Case
 <sup>`[html]`</sup> <sup>`[css]`</sup>
 
 Le **snake_case** est une notation ou les mots sont en **minuscules** et séparés d'**underscore** `_`.
@@ -202,7 +253,8 @@ Le **snake_case** est une notation ou les mots sont en **minuscules** et sépar�
 Les **entités** concernées sont:
 
 * `class` HTML
-* Classe CSS
+* [Variables CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+*  [**Super Classe**](#sélecteur-par-super-classe) et [**Classe Utilitaire**](#sélecteur-par-classe-utilitaire) CSS
 
 <br>
 
@@ -215,12 +267,20 @@ class="super_container d_flx"
 
 ```css
 /* css */
-.super_container.d_flx { /* ... */ }
+:root { --primary_color: crimson; }
+
+.super_container
+{
+    width : 100%;
+    height: 100%;
+}
+
+.d_flx { display: flex; }
 ```
 
 <br>
 
-## **Le Subject Screaming Snake Case**
+## Le Subject Screaming Snake Case
 <sup>`[js]`</sup>
 
 Le **subject_SCREAMING_SNAKE_CASE** est une nouvelle syntaxe utilisant le [**Subject Programming**](#le-subject-programming) et représentant une **valeur**.
@@ -275,7 +335,7 @@ class User
 
 <br>
 
-## **Le Subject Camel Case**
+## Le Subject Camel Case
 <sup>`[js]`</sup>
 
 Le **subject_camelCase** est une nouvelle syntaxe utilisant le [**Subject Programming**](#le-subject-programming) et représentant une **action**.
@@ -380,7 +440,8 @@ Il a pour rôles:
 
 1. **Importer** les styles
 2. **Reset** les règles natives
-3. **Ajouter** les classes utilitaires
+3. **Ajouter** des variables
+4. **Ajouter** des classes utilitaires
 
 <br>
 
@@ -392,7 +453,7 @@ Exemple de schéma **principal**:
 
 /* #\_IMPORTS_\ */
 
-    /* __MODULE */
+    /* __MODULES */
     @import (/* fichier modulaire */);
 
 
@@ -400,6 +461,11 @@ Exemple de schéma **principal**:
 
     /* __STYLE */
     body { margin: 0; }
+
+
+/* #\_VARS_\ */
+
+    /* __ROOT */
 
 
 /* #\_UTILS_\ */
@@ -430,6 +496,11 @@ Exemple d'un schéma modulaire dans un fichier **nav.css**:
 
 ```css
 /* #||__[nav]__|| */
+
+
+/* #\_IMPORTS_\ */
+
+    /* __MODULES */
 
 
 /* #\_THIS_\ */
@@ -476,8 +547,8 @@ Dans les fichiers CSS il existe **4 types** de sélecteurs.
 
 1. [**ID**](#sélecteur-par-id)
 2. [**Classe**](#sélecteur-par-classe)
-3. [**Classe Utilitaire**](#sélecteur-par-classe-utilitaire)
-4. [**Super Classe**](#sélecteur-par-super-classe)
+3. [**Super Classe**](#sélecteur-par-super-classe)
+4. [**Classe Utilitaire**](#sélecteur-par-classe-utilitaire)
 
 <br>
 
@@ -497,20 +568,9 @@ Le sélecteur de **classe** cible plusieurs composants similaires par leur `clas
 .selecteurParClass { /* ... */ }
 ```
 
-## Sélecteur par Classe Utilitaire
-
-Les **classes utilitaires** sont des `class` réutilisables comprenant une seule propriété.
-
-```css
-.d_flx { display: flex; }
-```
-
-> *Ces sélecteurs ont généralement un **nommage très court** avec un caractère faisant référence à la propriété, un underscore `_` et la valeur en abrégé.*<br>
-> *Par exemple, **"d"** peut faire référence à **"display"** et **"flx"** à la valeur **"flex"**.*
-
 ## Sélecteur par Super Classe
 
-Les **super classes** sont des `class` utilitaires comprenant plus d'une propriété.
+Les **super classes** sont des `class` utilitaires comprenant généralement plus d'une propriété.
 
 ```css
 .super_class
@@ -520,6 +580,17 @@ Les **super classes** sont des `class` utilitaires comprenant plus d'une propri�
     color: #FFF;
 }
 ```
+
+## Sélecteur par Classe Utilitaire
+
+Les **classes utilitaires** sont des `class` réutilisables comprenant **une seule propriété**.
+
+```css
+.d_flx { display: flex; }
+```
+
+> *Ces sélecteurs ont généralement un **nommage très court** avec un caractère faisant référence à la propriété, un underscore `_` et la valeur en abrégé.*<br>
+> *Par exemple, **"d"** peut faire référence à **"display"** et **"flx"** à la valeur **"flex"**.*
 
 <br>
 
@@ -645,8 +716,6 @@ Ces sections sont balisées par divers **commentaires**:
     // __THIS
 ```
 
-<br>
-
 ### **1. Les Imports**
 
 Import de dépendances par l'utilisation des modules ES6.
@@ -669,8 +738,6 @@ Import de dépendances par l'utilisation des modules ES6.
         /* Import des scripts... */
 ```
 
-<br>
-
 ### **2. Les Constantes**
 
 Les constantes `const` sont utilisées pour des **informations de configuration**, des **références aux éléments / composants** ou pour les [Objets muables](https://developer.mozilla.org/en-US/docs/Glossary/Mutable).
@@ -680,8 +747,6 @@ Les sous-balises précisent la nature des constantes par rapport au **sujet** du
 1. `__OUTSIDE` correspond aux constantes externes. Par exemple un élément parent.
 2. `__THIS` correspond aux constantes ayant le même sujet que le fichier.
 3. `__INSIDE` correspond aux constantes internes. Par exemple un élément enfant.
-
-<br>
 
 ```js
 // #\_CONSTANTES_\
@@ -714,8 +779,6 @@ Avec un exemple plus concret pour un fichier nommé **nav.js** et faisant réfé
     const FIRSTCHILD = NAV?.firstElementChild // FIRSTCHILD est un noeud interne au sujet
 ```
 
-<br>
-
 ### **3. Les Variables**
 
 Les variables `let` sont utilisées pour toutes informations susceptibles de changer comme pour les [Objets immuables](https://developer.mozilla.org/en-US/docs/Glossary/Immutable).
@@ -737,8 +800,6 @@ Les variables `let` sont utilisées pour toutes informations susceptibles de cha
 
         /* Variables internes au sujet */
 ```
-
-<br>
 
 ### **4. Les Fonctions**
 
@@ -784,8 +845,6 @@ Elles se classent en **3 catégories**:
 
 La plupart des fonctions sont définies dans le CRUD et suivent cet ordre logique de création `SET`, de lecture `GET`, de modification `UPDATES` et enfin de suppression `DESTROY`. <br>
 Ce sont notamment ces fonctions qui vont ajouter et supprimer les événements `EVENTS` par exemple.
-
-<br>
 
 ### **5. Les Exports**
 
@@ -882,13 +941,9 @@ class Subject
 
 > *Les mots `subject` et `Subject` sont remplacés par le nom de la `class`.*
 
-<br>
-
 ### **1. Les Imports**
 
 > *Voir [**Les Imports**](#1-les-imports) depuis le schéma fonctionnel.*
-
-<br>
 
 ### **2. Les Propriétés**
 
@@ -949,8 +1004,6 @@ Dans cet exemple, `__nav_STYLE_CONFIG` sera identique pour chaque instance, `#na
 > *Aucune différence n'est faite entre les propriétés externes, égales et internes pour éviter de surcharger la section de sous-balises.*<br>
 > *Alors, pour garder une bonne reconnaissance des sujets, le nommage des propriétés est identique à celui des variables.*
 
-<br>
-
 ### **3. Le Constructeur**
 
 Le constructeur initialise une nouvelle instance de `class`.
@@ -968,8 +1021,6 @@ class Subject
 ```
 
 > *À noter que le **constructeur** n'est pas toujours présent.*
-
-<br>
 
 ### **4. Les Méthodes**
 
@@ -1027,8 +1078,6 @@ class Subject
 }
 ```
 
-<br>
-
 ### **5. Les Exports**
 
 > *Voir [**Les Exports**](#1-les-exports) depuis le schéma fonctionnel.*
@@ -1043,7 +1092,7 @@ Cette méthode est associée à 2 nouvelles syntaxes de nommage: le [**Subject S
 Le CSS est ajouté au HTML via une seule balise `<link>` pointant vers le **style.css**.<br>
 Quant au JavaScript il est intégré par une balise `<script>` important un fichier d'initialisation nommé **page.js** et sa fonction `page_init`.
 
-Le fichier **style.css** utilise le [**Schéma Principal**](#le-schéma-principal) pour **importer**, **réinitialiser les styles** et ajouter les **classes utilitaires**.<br>
+Le fichier **style.css** utilise le [**Schéma Principal**](#le-schéma-principal) pour **importer**, **réinitialiser les styles** et ajouter des **variables** et **classes utilitaires**.<br>
 Le [**Schéma Modulaire**](#le-schéma-modulaire) est utilisé pour styliser un composant du DOM.
 
 Chaque fichier JavaScript respecte un schéma de construction parmi le [**Schéma Fonctionnel**](#i-le-schéma-fonctionnel) et le [**Schéma Objet**](#ii-schéma-objet).<br>

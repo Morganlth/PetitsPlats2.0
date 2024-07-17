@@ -1,94 +1,89 @@
-/*----------------------------------------------- #||--Filter--|| */
+/* #||__[Filter]__|| */
 
 
-/*-- #|-CLASS-| --*/
+// #\_IMPORTS_\
+
+    // __JS
+    import EVENTS    from '../contexts/Events.js'
+    import Searchbar from './SearchBar.js'
+    import Recipe    from './Recipe.js'
+    import Tree      from '../templates/Tree.js'
+    import Ref       from '../templates/Ref.js'
+
 
 class Filter extends Searchbar
 {
 
-// #\-STATICS-\
+// #\_PROPS_\
 
-    // --*
+    // __STATICS
     static __filter_$STORE = (() =>
     {
         const SUBSCRIBERS = new Set()
 
         function update(ref, remove = false, option = '') { for (const SUBSCRIBER of SUBSCRIBERS) SUBSCRIBER(ref, remove, option) }
 
-        function subscribe(callback) { if (callback instanceof Function) SUBSCRIBERS.add(callback) }
+        function subscribe(f) { if (f instanceof Function) SUBSCRIBERS.add(f) }
 
         return {update, subscribe}
     })()
 
-    static __filter_REFS = new Set() // partage les objet ref entre tout les filtres / permet une communication entre les différentes options des filtres
+    static __filter_FILTERS = new Map()
+    static __filter_REFS    = new Set() // partage les objet ref entre tout les filtres / permet une communication entre les différentes options des filtres
 
-
-// #\-PRIVATES-\
-
-    // --THIS
+    // __PRIVATES
     #filter
-
-    #filter_NAME = ''
-
 
     #controler
 
-
     #wrapper
-
     #wrapper_HEIGHT = 0
 
-
     #options
-
-    #options_TOP = 0
-
+    #options_TOP          = 0
     #options_CURRENT_REFS = new Set()
     #options_OPTIONS      = new Map()
-
-    #options_TREE = new Tree()
-
-
-// #\-PUBLICS-\
-
-    // --THIS
+    #options_TREE         = new Tree()
 
 
-// #\-CONSTRUCTOR-\
+// #\_CONSTRUCTOR_\
 
-    // --THIS
-    constructor ()
+    // __THIS
+    constructor (parent, name = '')
     {
         super()
 
-        this.#filter_set(...arguments)
+        this.#filter_set(parent, name)
 
         Filter.__filter_$STORE.subscribe(this.#option_update.bind(this))
+        Filter.__filter_FILTERS.set(name, this)
     }
 
 
-// #\-FUNCTIONS-\
+// #\_FUNCTIONS_\
 
-//=======@SETTER|
-
-    // --*
-
-
-//=======@GETTER|
-
-    // --*
-
-
-//=======@LIFE|
-
-    // --SET
-    #filter_set()
+    // __SET
+    #filter_set(parent, name)
     {
-        this.#filter_setVars(...arguments)
+        this.#filter_setHTML(parent, name)
+        this.#filter_setVars(parent)
         this.#filter_setEvents()
+        this.#controler_set()
+        this.#wrapper_set()
+        this.#options_set()
+        this.searchbar_set(this.#filter)
+
+        Recipe.__recipe_$STORE.subscribe(() => { if (this.#controler.controler_PRESSED) this.#options_sort() })
     }
 
-    #filter_setVars(name = '') { this.#filter_NAME = name }
+    #filter_setHTML(parent, name)
+    {
+        if (!(parent instanceof HTMLElement)) throw new TypeError(`"${parent}" is not an HTMLElement.`)
+
+        parent.insertAdjacentHTML('beforeend', Filter.__filter_getHTML(name))
+    }
+
+    #filter_setVars(parent) { this.#filter = parent.lastElementChild }
 
     #filter_setEvents()
     {
@@ -97,16 +92,47 @@ class Filter extends Searchbar
             resize: this.#filter_e$Resize.bind(this),
             click : this.#filter_e$Click .bind(this)
         })
+
+        this.#filter.addEventListener('research', this.#filter_eResearch.bind(this))
     }
+
+
+    #controler_set()
+    {
+        this.#controler_setVars()
+        this.#controler_setEvents()
+    }
+
+    #controler_setVars() { this.#controler = this.#filter.querySelector('.controler') }
+
+    #controler_setEvents() { this.#controler.addEventListener('click', this.#controler_eClick.bind(this)) }
+
+
+    #wrapper_set()
+    {
+        this.#wrapper_setVars()
+        this.#wrapper_updateHeightVars()
+    }
+
+    #wrapper_setVars() { this.#wrapper = this.#filter.querySelector('.wrapper') }
+
+
+    #options_set()
+    {
+        this.#options_setVars()
+        this.#options_updateTopVars()
+    }
+    
+    #options_setVars() { this.#options = this.#filter.querySelector('.options') }
 
 
     #option_set(ref, option = '')
     {
         this.#option_setHTML(option)
 
-        const OPTION = this.#options.lastElementChild
+        const OPTION = this.#options.lastElementChild.querySelector('.option')
 
-        this.#option_setVars(OPTION, ref)
+        this.#option_setParasites(OPTION, ref)
         this.#option_setEvents(OPTION)
 
         return OPTION
@@ -114,21 +140,20 @@ class Filter extends Searchbar
 
     #option_setHTML() { this.#options.insertAdjacentHTML('beforeend', Filter.__option_getHTML(...arguments)) }
 
-    #option_setVars(e, ref)
+    #option_setParasites(e, ref)
     {
         e.option_ACTIVE = false
         e.option_REF    = ref
     }
 
-    #option_setEvents(e) { e.querySelector('button').addEventListener('click', Filter.__option_eClick.bind(e)) }
+    #option_setEvents(e) { e.addEventListener('click', Filter.__option_eClick.bind(e)) }
 
-    // --GET
-    static __filter_getHTML(order = 0, name = '')
+    // __GET
+    static __filter_getHTML(name = '')
     {
         return `
             <li
             class="filter p_rlt z_1"
-            style="order:${order};"
             >
                 <button
                 class="controler d_flx j_sbt a_ctr b_brd b_lgh brd_r_11 c_drk f_hrt fw_500 super_item"
@@ -253,7 +278,7 @@ class Filter extends Searchbar
     }
 
 
-    #options_getRef(s = '') { for (const REF of Filter.__filter_REFS) if (REF.ref === s) return REF }
+    #options_getRef(ref = '') { for (const REF of Filter.__filter_REFS) if (REF.ref === ref) return REF }
 
     #options_getRefs() { return new Set(this.#options_OPTIONS.keys()) }
 
@@ -264,12 +289,12 @@ class Filter extends Searchbar
 
         return `
             <li
-            class="option d_cts"
-            role="option"
-            data-option="${OPTION}"
+            class="d_cts"
             >
                 <button
-                class="d_flx a_ctr w_any c_hrt f_hrt"
+                class="option d_flx a_ctr w_any c_hrt f_hrt"
+                role="option"
+                data-option="${OPTION}"
                 >
                     <span
                     class="f_1 d_blc o_hid w_any"
@@ -281,7 +306,8 @@ class Filter extends Searchbar
         `
     }
 
-    static __option_getCrossIconHTML()
+
+    static __cross_getHTML()
     {
         return `
             <i
@@ -313,7 +339,7 @@ class Filter extends Searchbar
         `
     }
 
-    // --UPDATES
+    // __UPDATES
     #filter_updateStyle()
     {
         requestAnimationFrame(() =>
@@ -322,55 +348,61 @@ class Filter extends Searchbar
             STYLE  = this.#filter.style,
             CLIP_Y = this.#options_TOP + this.#options.getBoundingClientRect().height
 
-            STYLE.setProperty('--filter_clipY'         ,                         CLIP_Y + 'px')
-            STYLE.setProperty('--background_translateY', -this.#wrapper_HEIGHT + CLIP_Y + 'px')
+            STYLE.setProperty('--filter_clip_y'         ,                         CLIP_Y + 'px')
+            STYLE.setProperty('--background_translate_y', -this.#wrapper_HEIGHT + CLIP_Y + 'px')
         })
     }
-
-    #filter_updateRecipeStore() { if (this.#controler.controler_PRESSED) this.#options_sort() }
 
 
     #controler_update()
     {
-        const
-        CONTROLER = this.#controler,
-        PRESSED   = !CONTROLER.controler_PRESSED
+        const PRESSED = !this.#controler.controler_PRESSED
 
         if   (PRESSED) this.#options_sort()
         else
         {
-            this.#options_CURRENT_REFS = this.#options_getRefs()
-
+            this.#options_updateCurrentRefs()
             this.input_reset()
         }
 
-        CONTROLER.ariaPressed = CONTROLER.controler_PRESSED = PRESSED
+        this.#controler_updateProprerties(PRESSED)
     }
 
+    #controler_updateProprerties(pressed = false) { this.#controler.ariaPressed = this.#controler.controler_PRESSED = pressed }
 
-    #wrapper_updateVars() { this.#wrapper_HEIGHT = this.#wrapper.offsetHeight }
+
+    #wrapper_updateHeightVars() { this.#wrapper_HEIGHT = this.#wrapper.offsetHeight }
 
 
-    #options_updateVars() { this.#options_TOP = this.#options.offsetTop }
-
-    #options_update(ref, recipe, option = '', s = '')
+    #options_update(ref, recipe, option = '', words = '')
     {
         this.#options_CURRENT_REFS.add(ref)
-    
+
         this.#options_OPTIONS.set(ref, { element: this.#option_set(ref, option), recipes: new Set([recipe]) })
 
-        this.#options_TREE.tree_addWords(s.split(' '), ref)
+        this.#options_TREE.tree_addWords(words.split(' '), ref)
     }
 
-    #options_updateOptionsDisplay(options = new Map(), hidden = false)
+    #options_updateOptionsDisplay(options = new Map(), action = 'remove') { for (let [_, {element}] of options) this.#option_updateDisplay(element, action) }
+
+    #options_updateTopVars() { this.#options_TOP = this.#options.offsetTop }
+
+    #options_updateCurrentRefs(words = '')
     {
-        const ACTION = hidden ? 'add': 'remove'
+        const REFS = this.#options_getRefs()
 
-        for (let [_, {element}] of options) this.#option_updateDisplay(element, ACTION)
+        if (words) for (const WORD of words.split(' '))
+        {
+            const MATCH = this.#options_TREE.tree_match(WORD)
+
+            if (!MATCH) { REFS.clear() ;break }
+
+            for (const REF of REFS) if (!MATCH.has(REF)) REFS.delete(REF)
+        }
+
+        this.#options_CURRENT_REFS = REFS
     }
 
-
-    #option_updateDisplay(option, action = 'remove') { option?.classList[action]('d_non') }
 
     #option_update(ref, remove = false)
     {
@@ -378,24 +410,25 @@ class Filter extends Searchbar
 
         if (!element) return
     
-        element.option_ACTIVE = !remove
-        element.classList       [remove ? 'remove' : 'add']('active')
-
-        remove ? element.querySelector('.cross')?.remove() : element.querySelector('button')?.insertAdjacentHTML('beforeend', Filter.__option_getCrossIconHTML())
+        this.#option_updateHTML(element, remove)
+        this.#option_updateProperties(element, !remove)
     }
 
-    // --TESTS
+    #option_updateHTML(e, remove = false) { remove ? e.querySelector('.cross')?.remove() : e.insertAdjacentHTML('beforeend', Filter.__cross_getHTML()) }
 
-    // --DESTROY
+    #option_updateProperties(e, active = false)
+    {
+        e.option_ACTIVE = active
+        e.classList      [active ? 'add' : 'remove']('active')
+    }
 
+    #option_updateDisplay(e, action = 'remove') { e?.classList[action]('d_non') }
 
-//=======@EVENTS|
-
-    // --*
+    // __EVENTS
     #filter_e$Resize()
     {
-        this.#wrapper_updateVars()
-        this.#options_updateVars()
+        this.#wrapper_updateHeightVars()
+        this.#options_updateTopVars()
     }
 
     #filter_e$Click({target})
@@ -414,22 +447,8 @@ class Filter extends Searchbar
     #filter_eResearch(e)
     {
         e.stopPropagation()
-    
-        const
-        VALUE = e.detail.value,
-        REFS  = this.#options_getRefs()
 
-        if (VALUE) for (const WORD of VALUE.split(' '))
-        {
-            const MATCH = this.#options_TREE.tree_match(WORD)
-
-            if (!MATCH) { REFS.clear() ;break }
-
-            for (const REF of REFS) if (!MATCH.has(REF)) REFS.delete(REF)
-        }
-
-        this.#options_CURRENT_REFS = REFS
-
+        this.#options_updateCurrentRefs(e.detail.value)
         this.#options_sort()
     }
 
@@ -439,60 +458,23 @@ class Filter extends Searchbar
 
     static __option_eClick() { Filter.__filter_$STORE.update(this.option_REF, this.option_ACTIVE ?? false, this.dataset.option) }
 
-
-//=======@UTILS|
-
-    // --*
-    #filter_render(parent, order)
-    {
-        if (!(parent instanceof HTMLElement)) throw new TypeError(`"${parent}" is not an HTMLElement.`)
-
-        parent.insertAdjacentHTML('beforeend', Filter.__filter_getHTML(order, this.#filter_NAME))
-
-        const FILTER = parent.lastElementChild
-
-        this.#filter    = FILTER
-        this.#controler = FILTER.querySelector('.controler')
-        this.#wrapper   = FILTER.querySelector('.wrapper')
-        this.#options   = FILTER.querySelector('.options')
-    }
-
-    #filter_hydrate()
-    {
-        this.#filter   .addEventListener('research', this.#filter_eResearch.bind(this))
-        this.#controler.addEventListener('click'   , this.#controler_eClick.bind(this))
-    }
-
-    filter_build()
-    {
-        this.#filter_render(...arguments)
-        this.#filter_hydrate()
-        this.searchbar_set(this.#filter)
-        this.#wrapper_updateVars()
-        this.#options_updateVars()
-
-        Recipe.__recipe_$STORE.subscribe(this.#filter_updateRecipeStore.bind(this))
-    }
-
-
-    options_add(options = [], recipe)
+    // __UTILS
+    options_add(options = [], compressedOptions, recipe)
     {
         const OPTIONS = this.#options_OPTIONS
 
-        for (const OPTION of typeof options === 'string' ? [options] : options)
+        for (let i = 0; i < options.length; i++)
         {
             const
-            COMPRESSED = str_compressed(OPTION),
-            REF        = this.#options_getRef(COMPRESSED)
+            COMPRESSED = compressedOptions[i],
+            REF        = this.#options_getRef(COMPRESSED) ?? new Ref(COMPRESSED)
 
-            if   (REF) OPTIONS.has(REF) ? OPTIONS.get(REF).recipes.add(recipe) : this.#options_update(REF, recipe, OPTION, COMPRESSED)
+            if   (OPTIONS.has(REF)) OPTIONS.get(REF).recipes.add(recipe)
             else
             {
-                const NEW_REF = new Ref(COMPRESSED)
-
-                Filter.__filter_REFS.add(NEW_REF)
+                Filter.__filter_REFS.add(REF)
     
-                this.#options_update(NEW_REF, recipe, OPTION, COMPRESSED)
+                this.#options_update(REF, recipe, options[i], COMPRESSED)
             }
         }
     }
@@ -513,7 +495,7 @@ class Filter extends Searchbar
             this.#option_updateDisplay(element, 'add')
         }
 
-        this.#options_updateOptionsDisplay(OPTIONS, false)
+        this.#options_updateOptionsDisplay(OPTIONS, 'remove')
         this.#filter_updateStyle()
     }
 
@@ -521,24 +503,7 @@ class Filter extends Searchbar
 }
 
 
-// #\-IMPORTS-\
+// #\_EXPORTS_\
 
-    // --ENV
-
-    // --SVELTE
-
-    // --LIB
-
-    // --JS
-    import EVENTS             from '../contexts/Events.js'
-    import Searchbar          from './Searchbar.js'
-    import Tree               from './Tree.js'
-    import Recipe             from './Recipe.js'
-    import Ref                from './Ref.js'
-    import { str_compressed } from '../utils/str.js'
-
-
-// #\-EXPORTS-\
-
-    // --THIS
+    // __THIS
     export default Filter
