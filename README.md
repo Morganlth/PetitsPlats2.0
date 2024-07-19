@@ -18,10 +18,10 @@ Cette documentation décrit et argumente le code de @morganlth.
         5. [**subject_camelCase**](#le-subject-camel-case)
 3. [**Les Schémas**](#les-schémas)
 4. [**Le CSS**](#le-css) <sup>`[css]`</sup>
-    1. [**Les Schémas**](#les-schémas-css)
+    1. [**Intégration**](#intégration-css)
+    2. [**Les Schémas**](#les-schémas-css)
         1. [**Principal**](#le-schéma-principal)
         2. [**Modulaire**](#le-schéma-modulaire)
-    2. [**Intégration**](#intégration-css)
     3. [**Les Sélécteurs**](#les-sélecteurs)
         1. [**ID**](#sélecteur-par-id)
         2. [**Classe**](#sélecteur-par-classe)
@@ -413,9 +413,25 @@ Par exemple dans un fichier **page.js**, `subject` sera remplacé par `page` (le
 
 ## **Sommaire**
 
-1. [**Les Schémas**](#les-schémas-css)
-2. [**Intégration**](#intégration-css)
+1. [**Intégration**](#intégration-css)
+2. [**Les Schémas**](#les-schémas-css)
 3. [**Les Sélécteurs**](#les-sélecteurs)
+
+<br>
+
+## **Intégration CSS**
+
+Pour utiliser le CSS, ajout d'une balise `<link>` dans le `<head>`:
+
+```html
+<link
+rel="stylesheet"
+href="[...]/style.css"
+type="text/css"
+>
+```
+
+Cette balise récupère le style **principal** depuis le **style.css**.
 
 <br>
 
@@ -462,6 +478,8 @@ Exemple de schéma **principal**:
     /* __STYLE */
     body { margin: 0; }
 
+    a:not(.default) { text-decoration: none; }
+
 
 /* #\_VARS_\ */
 
@@ -480,6 +498,9 @@ Exemple de schéma **principal**:
     /* __CLASS */
     .d_flx { display: flex; }
 ```
+
+Dans cet exemple, la classe `.default` peut-être utilisée sur les liens `<a>` pour **préserver** leur style par défaut.<br>
+Celle-ci sera couramment utilisée sur les éléments susceptibles de conserver leurs règles initiales.
 
 > *Notez que ce schéma est unique au fichier **style.css** alors le sujet sera toujours **style**.*
 
@@ -520,22 +541,6 @@ Exemple d'un schéma modulaire dans un fichier **nav.css**:
 ```
 
 > *Notez que `#NAV` en **MAJUSCULE** est facilement identifiable comme id et ne se confond pas avec la classe `.nav`.*
-
-<br>
-
-## **Intégration CSS**
-
-Pour utiliser le CSS, ajout d'une balise `<link>` dans le `<head>`:
-
-```html
-<link
-rel="stylesheet"
-href="[...]/style.css"
-type="text/css"
->
-```
-
-Cette balise récupère le style **principal** depuis le **style.css**.
 
 <br>
 
