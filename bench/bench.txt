@@ -1,4 +1,0 @@
-https://jsben.ch/X5Axk
-
-compare 1 => https://jsben.ch/9xTNU / speed ratio ~= 4.61
-compare 2 => https://jsben.ch/a4Q38 / speed ratio ~= 11.08
