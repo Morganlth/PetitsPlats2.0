@@ -18,12 +18,16 @@ class Tree
     // __UTILS
     tree_addWords(words = [], ref)
     {
-        for (const WORD of words)
+        for (let i = 0; i < words.length; i++)
         {
+            const WORD = words[i]
+
             let node = this.#tree_TREE
     
-            for (const CHAR of WORD)
+            for (let j = 0; j < WORD.length; j++)
             {
+                const CHAR = WORD[j]
+    
                 if (!node.has(CHAR)) node.set(CHAR, new Map([['@', new Set()]]))
 
                 node = node.get(CHAR)
@@ -37,8 +41,10 @@ class Tree
     {
         let node = this.#tree_TREE
     
-        for (const CHAR of word)
+        for (let i = 0; i < word.length; i++)
         {
+            const CHAR = word[i]
+    
             if (!node.has(CHAR)) return false
 
             node = node.get(CHAR)

@@ -311,7 +311,7 @@ class Filter extends Searchbar
     {
         return `
             <i
-            class="cross"
+            class="cross d_flx a_ctr"
             role="presentation"
             aria-hidden="true"
             >
@@ -391,13 +391,20 @@ class Filter extends Searchbar
     {
         const REFS = this.#options_getRefs()
 
-        if (words) for (const WORD of words.split(' '))
+        if (words)
         {
-            const MATCH = this.#options_TREE.tree_match(WORD)
-
-            if (!MATCH) { REFS.clear() ;break }
-
-            for (const REF of REFS) if (!MATCH.has(REF)) REFS.delete(REF)
+            const WORDS = words.split(' ')
+    
+            for (let i = 0; i < WORDS.length; i++)
+            {
+                const
+                WORD  = WORDS[i],
+                MATCH = this.#options_TREE.tree_match(WORD)
+    
+                if (!MATCH) { REFS.clear() ;break }
+    
+                for (const REF of REFS) if (!MATCH.has(REF)) REFS.delete(REF)
+            }
         }
 
         this.#options_CURRENT_REFS = REFS
@@ -435,10 +442,10 @@ class Filter extends Searchbar
     {
         if (!this.#controler.controler_PRESSED) return
         
-        while (true)
+        while (target)
         {
-            if (!target || target === document.body || target === document.documentElement) return this.#controler_update()
-            if (target === this.#filter                                                   ) return
+            if (target === document.body || target === document.documentElement) return this.#controler_update()
+            if (target === this.#filter                                        ) return
 
             target = target.parentNode
         }
@@ -479,10 +486,10 @@ class Filter extends Searchbar
         }
     }
 
-    #options_sort()
+    #options_sort(recipes)
     {
         const
-        RECIPES = Recipe.__recipe_$STORE.get(),
+        RECIPES = recipes ?? Recipe.__recipe_$STORE.get(),
         REFS    = this.#options_CURRENT_REFS,
         OPTIONS = new Map(this.#options_OPTIONS)
 

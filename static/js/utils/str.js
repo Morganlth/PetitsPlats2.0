@@ -18,8 +18,13 @@
     // __THIS
     export function str_normalize(s = '') { return s?.normalize('NFD').replace(/[\u0300-\u036f]/g, '') }
 
-    export function str_compressed(value) // optimise les textes à analiser en supprimant les petis mots, les accents, les majuscules, les signes de ponctuation et les caractères spéciaux
+    export function str_compressed(value) // optimize text by removing small words, accents, capital letters, punctuation marks and special characters
     {
+        /*
+            Strings shorter than “CONFIG_WORD_MIN_LENGTH” are overwritten.
+            This means that the beginnings of words such as “co” from “coco”, for example, will not be taken into account.
+        */
+
         return str_normalize((value instanceof Array
         ?  value.reduce((acc, s) => acc += s + ' ', '')
         :  value)

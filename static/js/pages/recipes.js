@@ -21,8 +21,8 @@
     let
     recipes_RECIPES         = new Set(),
     recipes_CURRENT_RECIPES = new Set(),
-    recipes_CURRENT_WORDS   = new Set(),
-    recipes_FILTERS         = new Set()
+    recipes_CURRENT_WORDS   = [],
+    recipes_FILTERS         = []
     ,
     recipes_LAST_LENGTH = 0
 
@@ -43,14 +43,6 @@
     async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => new Recipe(RECIPES, r))) }
 
     // __GET
-    function recipes_getWords(s = '')
-    {
-        const WORDS = new Set()
-
-        for (const WORD of s.split(' ')) if (WORD) WORDS.add(WORD)
-
-        return WORDS
-    }
 
     // __UPDATES
     function recipes_updateDisplay(recipes = [], hidden = false)
@@ -62,9 +54,19 @@
 
     function recipes_updateFilters(ref, remove = false)
     {
-        recipes_FILTERS[remove ? 'delete' : 'add'](ref.ref)
+        const FILTER = ref.ref
 
-        if (remove) recipes_resetVars()
+        if (remove)
+        {
+            const INDEX = recipes_FILTERS.indexOf(FILTER)
+
+            if (~INDEX === 0) return
+    
+            recipes_FILTERS.splice(INDEX, 1)
+
+            recipes_resetVars()
+        }
+        else recipes_FILTERS.push(FILTER)
 
         recipes_sort()
     }
@@ -74,9 +76,13 @@
 
     function recipes_sort()
     {
-        for (const WORD of new Set([...recipes_CURRENT_WORDS, ...recipes_FILTERS]))
+        const WORDS = [...recipes_CURRENT_WORDS, ...recipes_FILTERS]
+
+        for (let i = 0; i < WORDS.length; i++)
         {
-            const MATCH = Recipe.__recipe_TREE.tree_match(WORD)
+            const
+            WORD  = WORDS[i],
+            MATCH = Recipe.__recipe_TREE.tree_match(WORD)
             
             if (!MATCH) return recipes_updateDisplay(recipes_CURRENT_RECIPES, true)
         
@@ -88,7 +94,7 @@
             }
         }
 
-        recipes_updateDisplay(recipes_CURRENT_RECIPES)
+        recipes_updateDisplay(recipes_CURRENT_RECIPES, false)
         
         Recipe.__recipe_$STORE.set(recipes_CURRENT_RECIPES)
     }
@@ -105,7 +111,7 @@
 
         if (LENGTH < recipes_LAST_LENGTH) recipes_resetVars()
 
-        recipes_CURRENT_WORDS = recipes_getWords(s)
+        recipes_CURRENT_WORDS = s.split(' ').filter(w => w)
         recipes_LAST_LENGTH   = LENGTH
     
         recipes_sort()

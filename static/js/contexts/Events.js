@@ -13,7 +13,7 @@ class Events
 // #\_PROPS_\
 
     // __PRIVATES
-    #events_EVENTS   = ['resize', 'click', 'keydown']
+    #events_EVENTS   = ['resize', 'click']
     #events_MANAGERS = new Map()
 
 

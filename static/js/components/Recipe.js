@@ -18,11 +18,11 @@ class Recipe
     // __STATICS
     static __recipe_$STORE = (() =>
     {
-        const SUBSCRIBERS = new Set()
+        const SUBSCRIBERS = []
 
         let recipes = new Set()
 
-        const call = wait_debounce(() => { for (const SUBSCRIBER of SUBSCRIBERS) SUBSCRIBER(recipes) }, 3)
+        const call = wait_debounce(() => { for (let i = 0; i < SUBSCRIBERS.length; i++) SUBSCRIBERS[i](recipes) }, 3)
 
         function set(recipes2 = new Set())
         {
@@ -40,7 +40,7 @@ class Recipe
             call()
         }
 
-        function subscribe(f) { if (f instanceof Function) SUBSCRIBERS.add(f) }
+        function subscribe(f) { if (f instanceof Function && !~SUBSCRIBERS.indexOf(f)) SUBSCRIBERS.push(f) }
 
         return {set, get, update, subscribe}
     })()
@@ -50,10 +50,6 @@ class Recipe
 
     // __PRIVATES
     #recipe
-    #recipe_ID          = -1
-    #recipe_SERVINGS    = 0
-    #recipe_TIME        = 0
-    #recipe_IMAGE       = ''
     #recipe_NAME        = ''
     #recipe_DESCRIPTION = ''
     #recipe_APPLIANCE   = ''
@@ -98,13 +94,9 @@ class Recipe
         parent.insertAdjacentHTML('beforeend', Recipe.__recipe_getHTML(image, name, time, description, ingredients))
     }
 
-    #recipe_setVars(parent, {id, servings, time, image, name, description, appliance, ingredients, ustensils})
+    #recipe_setVars(parent, {name, description, appliance, ingredients, ustensils})
     {
         this.#recipe             = parent.lastElementChild
-        this.#recipe_ID          = id
-        this.#recipe_SERVINGS    = servings
-        this.#recipe_TIME        = time
-        this.#recipe_IMAGE       = image
         this.#recipe_NAME        = name
         this.#recipe_DESCRIPTION = description
         this.#recipe_APPLIANCE   = appliance

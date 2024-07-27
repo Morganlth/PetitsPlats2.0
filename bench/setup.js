@@ -1890,11 +1890,16 @@ const RECIPES_RECIPES =
 ]
 
 let
-recipes_RECIPES         = recipes_getRecipes(),
-recipes_CURRENT_RECIPES = new Set(),
-recipes_CURRENT_WORDS   = recipes_getWords('limonade de coco')
+recipes_RECIPES          = recipes_getRecipes(),
+recipes_CURRENT_RECIPES  = new Set(),
+recipes_CURRENT_WORDS    = recipes_getWords('limonade de coco'),
+recipes_RECIPES2         = recipes_getRecipes2(),
+recipes_CURRENT_RECIPES2 = [],
+recipes_CURRENT_WORDS2   = recipes_getWords2('limonade de coco')
 
 function recipes_getRecipes() { return new Set(RECIPES_RECIPES.map(r => new Recipe(r))) }
+
+function recipes_getRecipes2() { return RECIPES_RECIPES.map(r => new Recipe(r)) }
 
 function recipes_getWords(s = '')
 {
@@ -1905,4 +1910,17 @@ function recipes_getWords(s = '')
     return WORDS
 }
 
+function recipes_getWords2(s = '')
+{
+    return s.split(' ').reduce((acc, word) =>
+    {
+        if (word) acc.push(word)
+
+        return acc
+    },
+    [])
+}
+
 function recipes_resetVars() { recipes_CURRENT_RECIPES = new Set(recipes_RECIPES) }
+
+function recipes_resetVars2() { recipes_CURRENT_RECIPES2 = [...recipes_RECIPES2] }
