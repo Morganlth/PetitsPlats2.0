@@ -34,7 +34,7 @@
     function total_set() { Recipe.__recipe_$STORE.subscribe(total_update) }
 
     // __UPDATES
-    function total_update(s) { if (TOTAL) TOTAL.textContent = (s.size ?? 0) + ' recettes' }
+    function total_update(recipes = new Set()) { if (TOTAL) TOTAL.textContent = (recipes.size ?? 0) + ' recettes' }
 
     // __UTILS
     function filter_iter() { for (const FILTER of Recipe.__recipe_FILTERS) new Filter(UL, FILTER) }
