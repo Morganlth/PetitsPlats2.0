@@ -16,7 +16,7 @@
 // #\_FUNCTIONS_\
 
     // __SET
-    function searchbar_set() { new SearchBar().searchbar_set(SEARCHBAR) }
+    function searchbar_set() { new SearchBar().searchbar_set(SEARCHBAR, true) }
 
 
 // #\_EXPORTS_\

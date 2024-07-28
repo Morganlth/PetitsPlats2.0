@@ -14,6 +14,7 @@ class SearchBar
 
     // __PRIVATES
     #searchbar
+    #searchbar_BUBBLES = false
 
     #form
 
@@ -37,11 +38,12 @@ class SearchBar
         this.#sender_set()
     }
 
-    #searchbar_setVars(searchbar) 
+    #searchbar_setVars(searchbar, bubbles = false) 
     {
         if (!(searchbar instanceof HTMLElement)) throw new TypeError(`"${searchbar}" is not an HTMLElement.`)
 
-        this.#searchbar = searchbar
+        this.#searchbar         = searchbar
+        this.#searchbar_BUBBLES = bubbles
     }
 
 
@@ -99,24 +101,28 @@ class SearchBar
         {
             this.#input_VALUE = VALUE
 
-            this.#searchbar_dispatch()
+            this.#searchbar_dispatchResearch()
         }
+
+        if (this.#searchbar_BUBBLES) this.#searchbar_dispatchInput()
     }
 
     #deleter_eClick()
     {
         this.input_reset()
-        this.#searchbar_dispatch()
+        this.#searchbar_dispatchResearch()
     }
 
     #sender_eClick()
     {
-        this.#searchbar_dispatch()
+        this.#searchbar_dispatchResearch()
         this.input_reset()
     }
 
     // __UTILS
-    #searchbar_dispatch() { this.#searchbar?.dispatchEvent(new CustomEvent('research', { bubbles: true, detail: { value: this.#input_VALUE }}))}
+    #searchbar_dispatchInput() { this.#searchbar?.dispatchEvent(new CustomEvent('writing', { bubbles: true, detail: { value: this.#input.value }})) }
+
+    #searchbar_dispatchResearch() { this.#searchbar?.dispatchEvent(new CustomEvent('research', { bubbles: true, detail: { value: this.#input_VALUE }})) }
 
     input_reset() { if (this.#input) this.#input_VALUE = this.#input.value = '' }
 
