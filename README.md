@@ -1,3 +1,51 @@
+# **Développez un algorithme de recherche en JavaScript**
+
+Dans ce projet, nous réalisons un moteur de recherche fluide et performant pour **Les petits plats**.
+
+Ce moteur est construit autour d'un arbre dans lequel chaque noeud correspond à un caractère.<br>
+Le programme analyse et optimise les caractères entrés par l'utilisateur.<br>
+Puis, il cherche des correspondances dans l'arbre et filtre les recettes.
+
+Pour sélectionner la meilleure méthode de filtrage, deux versions ont été réalisées:
+
+1. **Boucles natives** (while, for...) 
+2. **Méthodes** (foreach, filter, map, reduce) 
+
+<br>
+
+> *Chaque version modifie la fonction `recipes_sort` depuis le fichier **./static/js/pages/recipes.js**.*
+
+# Algorigramme
+
+Pour vous familiariser, voici une représentation graphique du projet:
+
+![Algorigramme](./algorigramme.png)
+
+<br>
+
+# Benchmark
+
+**jsben.ch** a été utilisé pour comparer les deux implémentations.
+
+> *Voir le [**benchmark**](https://jsben.ch/3Uba9).*
+
+## **Les résultats**
+
+Pour **Chrome** et **Edge** nous observons une différence de **10%** en faveur des **boucles natives**.<br>
+Néanmoins, du côté de **Firefox** les **méthodes** sont plus performantes avec une différence de **5%**.<br>
+Enfin, sur mobile avec **Safari** une petite différence de **2%** pour les **boucles natives** est relevée.
+
+## **Conclusion**
+
+De par les différents tests réalisés et la popularité des navigateurs, nous avons gardé l'implémentation avec les **boucles natives**.
+
+<br>
+
+***
+***
+
+<br>
+
 # **Doc**
 
 Cette documentation décrit et argumente le code de @morganlth.
