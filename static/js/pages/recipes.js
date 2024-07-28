@@ -43,7 +43,7 @@
     async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => new Recipe(RECIPES, r))) }
 
     // __UPDATES
-    function recipes_updateDisplay(recipes = [], hidden = false)
+    function recipes_updateDisplay(recipes = new Set(), hidden = false)
     {
         const ACTION = hidden ? 'add' : 'remove'
     
@@ -74,12 +74,14 @@
 
     function recipes_sort()
     {
-        [...recipes_CURRENT_WORDS, ...recipes_FILTERS].forEach(word =>
+        let hidden = false
+
+        ;[...recipes_CURRENT_WORDS, ...recipes_FILTERS].forEach(word =>
         {
             const MATCH = Recipe.__recipe_TREE.tree_match(word)
             
-            if (!MATCH) return recipes_updateDisplay(recipes_CURRENT_RECIPES, true)
-        
+            if (!MATCH) return hidden = true
+
             recipes_CURRENT_RECIPES.forEach(recipe =>
             {
                 if (!MATCH.has(recipe))
@@ -91,9 +93,9 @@
             })
         })
 
-        recipes_updateDisplay(recipes_CURRENT_RECIPES, false)
+        recipes_updateDisplay(recipes_CURRENT_RECIPES, hidden)
         
-        Recipe.__recipe_$STORE.set(recipes_CURRENT_RECIPES)
+        Recipe.__recipe_$STORE.set(hidden ? new Set() : recipes_CURRENT_RECIPES)
     }
 
 
