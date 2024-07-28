@@ -11,8 +11,6 @@
 
 #HEADER
 {
-    /* aspect-ratio: 1440 / 667; */
-
     height: 66.7rem;
 
     padding: 5.1rem 6.9rem;
@@ -27,7 +25,6 @@
 {
     margin-bottom: 3rem;
 
-    font-size     : 44px;
     letter-spacing: .3rem;
     line-height   : 1.5;
 }
