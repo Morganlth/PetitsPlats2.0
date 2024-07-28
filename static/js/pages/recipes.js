@@ -42,8 +42,6 @@
 
     async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => new Recipe(RECIPES, r))) }
 
-    // __GET
-
     // __UPDATES
     function recipes_updateDisplay(recipes = [], hidden = false)
     {
