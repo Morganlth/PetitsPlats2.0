@@ -1,0 +1,6 @@
+/* #||__[searchbar]__|| */
+
+
+/* #\_THIS_\ */
+
+.searchbar input[type="search"]:placeholder-shown + button[type="button"] { visibility: hidden; }
