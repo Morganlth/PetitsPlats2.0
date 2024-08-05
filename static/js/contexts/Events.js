@@ -30,11 +30,11 @@ class Events
     {
         this.#events_setBinding()
     
-        for (const EVENT of this.#events_EVENTS)
+        this.#events_EVENTS.forEach(event =>
         {
-            this.#events_setVars(EVENT)
-            this.#events_setEvents(EVENT, this['events_e' + EVENT.at(0).toUpperCase() + EVENT.slice(1)])
-        }
+            this.#events_setVars(event)
+            this.#events_setEvents(event, this['events_e' + event.at(0).toUpperCase() + event.slice(1)])
+        })
     }
 
     #events_setBinding() { this.events_eResize = wait_debounce.call(this, this.events_eResize, 6) }
@@ -47,7 +47,7 @@ class Events
     events_eResize() { this.#events_call.call(this.#events_MANAGERS.get('resize')) }
 
     // __UTILS
-    async #events_call() { for (const CALLBACK of this) CALLBACK(...arguments) } // this === Array
+    async #events_call() { this.forEach(callback => callback(...arguments)) } // this === Set
 
     #events_testArgs(events) { return events instanceof Object }
 

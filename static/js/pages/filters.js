@@ -37,7 +37,7 @@
     function total_update(s) { if (TOTAL) TOTAL.textContent = (s.size ?? 0) + ' recettes' }
 
     // __UTILS
-    function filter_iter() { for (const FILTER of Recipe.__recipe_FILTERS) new Filter(UL, FILTER) }
+    function filter_iter() { Recipe.__recipe_FILTERS.forEach(filter => new Filter(UL, filter)) }
 
 
 // #\_EXPORTS_\

@@ -18,39 +18,35 @@ class Tree
     // __UTILS
     tree_addWords(words = [], ref)
     {
-        for (let i = 0; i < words.length; i++)
+        words.forEach(word =>
         {
-            const WORD = words[i]
-
             let node = this.#tree_TREE
-    
-            for (let j = 0; j < WORD.length; j++)
-            {
-                const CHAR = WORD[j]
-    
-                if (!node.has(CHAR)) node.set(CHAR, new Map([['@', new Set()]]))
 
-                node = node.get(CHAR)
+            word.split('').forEach(char =>
+            {
+                if (!node.has(char)) node.set(char, new Map([['@', new Set()]]))
+
+                node = node.get(char)
 
                 node.get('@').add(ref)
-            }
-        }
+            })
+        })
     }
 
     tree_match(word = '')
     {
-        let node = this.#tree_TREE
-    
-        for (let i = 0; i < word.length; i++)
+        let
+        node  = this.#tree_TREE,
+        found = true
+
+        word.split('').forEach(char =>
         {
-            const CHAR = word[i]
-    
-            if (!node.has(CHAR)) return false
+            if (!node.has(char)) return found = false
 
-            node = node.get(CHAR)
-        }
+            node = node.get(char)
+        })
 
-        return node.get('@')
+        return found ? node.get('@') : false
     }
 
 

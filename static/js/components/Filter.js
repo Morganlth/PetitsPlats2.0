@@ -21,7 +21,7 @@ class Filter extends Searchbar
     {
         const SUBSCRIBERS = new Set()
 
-        function update(ref, remove = false, option = '') { for (const SUBSCRIBER of SUBSCRIBERS) SUBSCRIBER(ref, remove, option) }
+        function update(ref, remove = false, option = '') { SUBSCRIBERS.forEach(subscriber => subscriber(ref, remove, option)) }
 
         function subscribe(f) { if (f instanceof Function) SUBSCRIBERS.add(f) }
 
@@ -278,7 +278,14 @@ class Filter extends Searchbar
     }
 
 
-    #options_getRef(ref = '') { for (const REF of Filter.__filter_REFS) if (REF.ref === ref) return REF }
+    #options_getRef(ref = '')
+    {
+        let found
+
+        Filter.__filter_REFS.forEach(r => { if (r.ref === ref) return found = r })
+
+        return found
+    }
 
     #options_getRefs() { return new Set(this.#options_OPTIONS.keys()) }
 
@@ -470,7 +477,7 @@ class Filter extends Searchbar
     {
         const OPTIONS = this.#options_OPTIONS
 
-        for (let i = 0; i < options.length; i++)
+        options.forEach((option, i) =>
         {
             const
             COMPRESSED = compressedOptions[i],
@@ -481,9 +488,9 @@ class Filter extends Searchbar
             {
                 Filter.__filter_REFS.add(REF)
     
-                this.#options_update(REF, recipe, options[i], COMPRESSED)
+                this.#options_update(REF, recipe, option, COMPRESSED)
             }
-        }
+        })
     }
 
     #options_sort(recipes)
@@ -493,14 +500,20 @@ class Filter extends Searchbar
         REFS    = this.#options_CURRENT_REFS,
         OPTIONS = new Map(this.#options_OPTIONS)
 
-        loop: for (let [ref, {element, recipes}] of OPTIONS)
-        {
-            if (REFS.has(ref)) for (const RECIPE of recipes) if (RECIPES.has(RECIPE)) continue loop
-    
-            OPTIONS.delete(ref)
+        let removes = true
 
-            this.#option_updateDisplay(element, 'add')
-        }
+        OPTIONS.forEach(({element, recipes}, ref) =>
+        {
+            if (REFS.has(ref)) recipes.forEach(recipe => { if (RECIPES.has(recipe)) return removes = false })
+
+            if (removes)
+            {
+                OPTIONS.delete(ref)
+
+                this.#option_updateDisplay(element, 'add')
+            }
+            else removes = true
+        })
 
         this.#options_updateOptionsDisplay(OPTIONS, 'remove')
         this.#filter_updateStyle()

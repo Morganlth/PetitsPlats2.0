@@ -22,7 +22,7 @@ class Recipe
 
         let recipes = new Set()
 
-        const call = wait_debounce(() => { for (let i = 0; i < SUBSCRIBERS.length; i++) SUBSCRIBERS[i](recipes) }, 3)
+        const call = wait_debounce(() => { SUBSCRIBERS.forEach(subscriber => subscriber(recipes)) }, 3)
 
         function set(recipes2 = new Set())
         {
@@ -76,15 +76,14 @@ class Recipe
         this.#recipe_setHTML(...arguments)
         this.#recipe_setVars(...arguments)
 
-        for (const [FILTER, VALUE] of
-        [
+        ;[
             [null                      , this.#recipe_NAME                                         ],
             [null                      , this.#recipe_DESCRIPTION                                  ],
             [Recipe.__recipe_FILTERS[0], this.#recipe_INGREDIENTS.map(({ingredient}) => ingredient)],
             [Recipe.__recipe_FILTERS[1], this.#recipe_APPLIANCE                                    ],
             [Recipe.__recipe_FILTERS[2], this.#recipe_USTENSILS                                    ]
-        ])
-        this.#recipe_setKeywords(FILTER, VALUE)
+        ]
+        .forEach(this.#recipe_setKeywords, this)
     }
 
     #recipe_setHTML(parent, {time, image, name, description, ingredients})
@@ -104,7 +103,7 @@ class Recipe
         this.#recipe_USTENSILS   = ustensils
     }
 
-    #recipe_setKeywords(filter = '', value)
+    #recipe_setKeywords([filter = '', value = '' || []])
     {
         let filter_COMPRESSED_OPTIONS = []
 

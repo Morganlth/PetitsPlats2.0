@@ -46,8 +46,8 @@
     function recipes_updateDisplay(recipes = new Set(), hidden = false)
     {
         const ACTION = hidden ? 'add' : 'remove'
-    
-        for (const RECIPE of recipes) RECIPE.recipe_updateDisplay(ACTION)
+
+        recipes.forEach(recipe => recipe.recipe_updateDisplay(ACTION))
     }
 
     function recipes_updateFilters(ref, remove = false)
