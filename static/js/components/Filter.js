@@ -7,8 +7,8 @@
     import { events_add }    from '../utils/events.js'
     import searchbar         from './searchbar.js'
     import { RECIPE_$STORE } from './recipe.js'
-    import Tree              from '../templates/Tree.js'
-    import Ref               from '../templates/Ref.js'
+    import tree              from '../templates/tree.js'
+    import ref               from '../templates/ref.js'
 
 
 function filter(parent, name = '')
@@ -30,7 +30,7 @@ function filter(parent, name = '')
     options_TOP          = 0,
     options_CURRENT_REFS = new Set(),
     options_OPTIONS      = new Map(),
-    options_TREE         = new Tree()
+    options_TREE         = tree()
 
     let input_reset = () => void 0
 
@@ -470,7 +470,7 @@ function filter(parent, name = '')
         {
             const
             COMPRESSED = compressedOptions[i],
-            REF        = options_getRef(COMPRESSED) ?? new Ref(COMPRESSED)
+            REF        = options_getRef(COMPRESSED) ?? ref(COMPRESSED)
 
             if   (OPTIONS.has(REF)) OPTIONS.get(REF).recipes.add(recipe)
             else

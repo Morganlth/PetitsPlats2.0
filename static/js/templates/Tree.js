@@ -1,59 +1,51 @@
-/* #||__[Tree]__|| */
+/* #||__[tree]__|| */
 
 
-class Tree
+function tree()
 {
 
 // #\_PROPS_\
 
     // __PRIVATES
-    #tree_TREE = new Map()
+    const TREE_TREE = new Map()
 
-
-// #\_FUNCTIONS_\
-
-    // __GETTER
-    get tree_TREE() { return this.#tree_TREE }
-
-    // __UTILS
-    tree_addWords(words = [], ref)
-    {
-        words.forEach(word =>
+    return {
+        tree_addWords: (words = [], ref) =>
         {
-            let node = this.#tree_TREE
+            words.forEach(word =>
+            {
+                let node = TREE_TREE
+
+                word.split('').forEach(char =>
+                {
+                    if (!node.has(char)) node.set(char, new Map([['@', new Set()]]))
+
+                    node = node.get(char)
+
+                    node.get('@').add(ref)
+                })
+            })
+        },
+        tree_match: (word = '') =>
+        {
+            let
+            node  = TREE_TREE,
+            found = true
 
             word.split('').forEach(char =>
             {
-                if (!node.has(char)) node.set(char, new Map([['@', new Set()]]))
+                if (!node.has(char)) return found = false
 
                 node = node.get(char)
-
-                node.get('@').add(ref)
             })
-        })
+
+            return found ? node.get('@') : false
+        }
     }
-
-    tree_match(word = '')
-    {
-        let
-        node  = this.#tree_TREE,
-        found = true
-
-        word.split('').forEach(char =>
-        {
-            if (!node.has(char)) return found = false
-
-            node = node.get(char)
-        })
-
-        return found ? node.get('@') : false
-    }
-
-
 }
 
 
 // #\_EXPORTS_\
 
     // __THIS
-    export default Tree
+    export default tree

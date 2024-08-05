@@ -5,7 +5,7 @@
 
     // __JS
     import { FILTER_FILTERS } from './filter.js'
-    import Tree               from '../templates/Tree.js'
+    import tree               from '../templates/tree.js'
     import { str_compressed } from '../utils/str.js'
     import { wait_debounce  } from '../utils/wait.js'
 
@@ -237,5 +237,5 @@ function recipe()
 
         return {set, get, update, subscribe}
     })(),
-    RECIPE_TREE    = new Tree(),
+    RECIPE_TREE    = tree(),
     RECIPE_FILTERS = ['Ingredients', 'Appareils', 'Ustensiles']
