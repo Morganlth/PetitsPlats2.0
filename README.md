@@ -27,7 +27,7 @@ Pour vous familiariser, voici une représentation graphique du projet:
 
 **jsben.ch** a été utilisé pour comparer les deux implémentations.
 
-> *Voir le [**benchmark**](https://jsben.ch/OBvVP).*
+> *Voir le [**benchmark**](https://jsben.ch/aA4Lo).*
 
 ## **Les résultats**
 
