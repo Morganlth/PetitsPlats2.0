@@ -4,8 +4,8 @@
 // #\_IMPORTS_\
 
     // __JS
-    import Filter from '../components/Filter.js'
-    import Tag    from '../components/Tag.js'
+    import tag               from '../components/tag.js'
+    import { FILTER_$STORE } from '../components/filter.js'
 
 
 // #\_CONSTANTES_\
@@ -20,17 +20,17 @@
 // #\_FUNCTIONS_\
 
     // __SET
-    function tags_set() { Filter.__filter_$STORE.subscribe(tags_update) }
+    function tags_set() { FILTER_$STORE.subscribe(tags_update) }
 
     // __UPDATES
-    function tags_update(ref, remove = false, tag = '')
+    function tags_update(ref, remove = false, name = '')
     {
         if (remove)
         {
-            TAGS_TAGS.get   (ref)?.tag_destroy()
+            TAGS_TAGS.get   (ref)() // destroy
             TAGS_TAGS.delete(ref)
         }
-        else TAGS_TAGS.set(ref, new Tag(TAGS, ref, tag))
+        else TAGS_TAGS.set(ref, tag(TAGS, ref, name))
     }
 
 

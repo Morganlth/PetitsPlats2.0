@@ -4,9 +4,9 @@
 // #\_IMPORTS_\
 
     // __JS
-    import Recipe   from '../components/Recipe.js'
-    import Filter   from '../components/Filter.js'
-    import data_get from '../utils/data.js'
+    import recipe, { RECIPE_$STORE, RECIPE_TREE } from '../components/recipe.js'
+    import         { FILTER_$STORE              } from '../components/filter.js'
+    import data_get                               from '../utils/data.js'
 
 
 // #\_CONSTANTES_\
@@ -37,17 +37,17 @@
   await recipes_setVars()
         recipes_resetVars()
 
-        Filter.__filter_$STORE.subscribe(recipes_updateFilters)
+        FILTER_$STORE.subscribe(recipes_updateFilters)
     }
 
-    async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => new Recipe(RECIPES, r))) }
+    async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => recipe(RECIPES, r))) }
 
     // __UPDATES
     function recipes_updateDisplay(recipes = new Set(), hidden = false)
     {
         const ACTION = hidden ? 'add' : 'remove'
 
-        recipes.forEach(recipe => recipe.recipe_updateDisplay(ACTION))
+        recipes.forEach(recipe => recipe.updateDisplay(ACTION))
     }
 
     function recipes_updateFilters(ref, remove = false)
@@ -78,7 +78,7 @@
 
         ;[...recipes_CURRENT_WORDS, ...recipes_FILTERS].forEach(word =>
         {
-            const MATCH = Recipe.__recipe_TREE.tree_match(word)
+            const MATCH = RECIPE_TREE.tree_match(word)
             
             if (!MATCH) return hidden = true
 
@@ -86,7 +86,7 @@
             {
                 if (!MATCH.has(recipe))
                 {
-                    recipe.recipe_updateDisplay('add')
+                    recipe.updateDisplay('add')
     
                     recipes_CURRENT_RECIPES.delete(recipe)
                 }
@@ -95,7 +95,7 @@
 
         recipes_updateDisplay(recipes_CURRENT_RECIPES, hidden)
         
-        Recipe.__recipe_$STORE.set(hidden ? new Set() : recipes_CURRENT_RECIPES)
+        RECIPE_$STORE.set(hidden ? new Set() : recipes_CURRENT_RECIPES)
     }
 
 

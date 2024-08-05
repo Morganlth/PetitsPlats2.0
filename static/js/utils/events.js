@@ -20,16 +20,12 @@
     // __SET
     ;(function events_auto_set()
     {
-        events_setBinding()
-    
         EVENTS_EVENTS.forEach((debounce, event) =>
         {
             events_setVars(event)
             events_setEvents(event, debounce)
         })
     })()
-
-    function events_setBinding() { events_eResize = wait_debounce(events_eResize, 6) }
 
     function events_setVars(event) { EVENTS_MANAGERS.set(event, new Set()) }
 
@@ -39,9 +35,6 @@
     
         window.addEventListener(event, debounce ? wait_debounce(CALLBACK, debounce) : CALLBACK)
     }
-
-    // __EVENTS
-    function events_eResize() { events_call.call(EVENTS_MANAGERS.get('resize')) }
 
     // __UTILS
     function events_call() { this.forEach(callback => callback(...arguments)) } // this === Set

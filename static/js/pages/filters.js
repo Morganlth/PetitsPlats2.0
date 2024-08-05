@@ -4,8 +4,8 @@
 // #\_IMPORTS_\
 
     // __JS
-    import Filter from '../components/Filter.js'
-    import Recipe from '../components/Recipe.js'
+    import filter                            from '../components/filter.js'
+    import { RECIPE_$STORE, RECIPE_FILTERS } from '../components/recipe.js'
 
 
 // #\_CONSTANTES_\
@@ -31,13 +31,13 @@
     }
 
     
-    function total_set() { Recipe.__recipe_$STORE.subscribe(total_update) }
+    function total_set() { RECIPE_$STORE.subscribe(total_update) }
 
     // __UPDATES
     function total_update(s) { if (TOTAL) TOTAL.textContent = (s.size ?? 0) + ' recettes' }
 
     // __UTILS
-    function filter_iter() { Recipe.__recipe_FILTERS.forEach(filter => new Filter(UL, filter)) }
+    function filter_iter() { RECIPE_FILTERS.forEach(fltr => filter(UL, fltr)) }
 
 
 // #\_EXPORTS_\

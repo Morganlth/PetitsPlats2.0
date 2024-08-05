@@ -4,7 +4,7 @@
 // #\_IMPORTS_\
 
     // __JS
-    import SearchBar from '../components/SearchBar.js'
+    import searchbar from '../components/searchbar.js'
 
 
 // #\_CONSTANTES_\
@@ -16,7 +16,7 @@
 // #\_FUNCTIONS_\
 
     // __SET
-    function searchbar_set() { new SearchBar().searchbar_set(SEARCHBAR, true) }
+    function searchbar_set() { searchbar()(SEARCHBAR, true) }
 
 
 // #\_EXPORTS_\

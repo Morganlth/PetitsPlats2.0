@@ -1,155 +1,144 @@
-/* #||__[Filter]__|| */
+/* #||__[filter]__|| */
 
 
 // #\_IMPORTS_\
 
     // __JS
-    import { events_add } from '../utils/events.js'
-    import Searchbar      from './SearchBar.js'
-    import Recipe         from './Recipe.js'
-    import Tree           from '../templates/Tree.js'
-    import Ref            from '../templates/Ref.js'
+    import { events_add }    from '../utils/events.js'
+    import searchbar         from './searchbar.js'
+    import { RECIPE_$STORE } from './recipe.js'
+    import Tree              from '../templates/Tree.js'
+    import Ref               from '../templates/Ref.js'
 
 
-class Filter extends Searchbar
+function filter(parent, name = '')
 {
 
 // #\_PROPS_\
 
-    // __STATICS
-    static __filter_$STORE = (() =>
-    {
-        const SUBSCRIBERS = new Set()
-
-        function update(ref, remove = false, option = '') { SUBSCRIBERS.forEach(subscriber => subscriber(ref, remove, option)) }
-
-        function subscribe(f) { if (f instanceof Function) SUBSCRIBERS.add(f) }
-
-        return {update, subscribe}
-    })()
-
-    static __filter_FILTERS = new Map()
-    static __filter_REFS    = new Set() // partage les objet ref entre tout les filtres / permet une communication entre les différentes options des filtres
-
     // __PRIVATES
-    #filter
+    let filter
 
-    #controler
+    let controler
 
-    #wrapper
-    #wrapper_HEIGHT = 0
+    let
+    wrapper,
+    wrapper_HEIGHT = 0
 
-    #options
-    #options_TOP          = 0
-    #options_CURRENT_REFS = new Set()
-    #options_OPTIONS      = new Map()
-    #options_TREE         = new Tree()
+    let
+    options,
+    options_TOP          = 0,
+    options_CURRENT_REFS = new Set(),
+    options_OPTIONS      = new Map(),
+    options_TREE         = new Tree()
+
+    let input_reset = () => void 0
 
 
 // #\_CONSTRUCTOR_\
 
     // __THIS
-    constructor (parent, name = '')
-    {
-        super()
+    filter_set()
 
-        this.#filter_set(parent, name)
-
-        Filter.__filter_$STORE.subscribe(this.#option_update.bind(this))
-        Filter.__filter_FILTERS.set(name, this)
-    }
+    FILTER_$STORE.subscribe(option_update)
+    FILTER_FILTERS.set(name, options_add)
 
 
 // #\_FUNCTIONS_\
 
     // __SET
-    #filter_set(parent, name)
+    function filter_set()
     {
-        this.#filter_setHTML(parent, name)
-        this.#filter_setVars(parent)
-        this.#filter_setEvents()
-        this.#controler_set()
-        this.#wrapper_set()
-        this.#options_set()
-        this.searchbar_set(this.#filter)
+        filter_setHTML()
+        filter_setVars()
+        filter_setEvents()
+        controler_set()
+        wrapper_set()
+        input_set()
+        options_set()
 
-        Recipe.__recipe_$STORE.subscribe(() => { if (this.#controler.controler_PRESSED) this.#options_sort() })
+        RECIPE_$STORE.subscribe(() => { if (controler.controler_PRESSED) options_sort() })
     }
 
-    #filter_setHTML(parent, name)
+    function filter_setHTML()
     {
         if (!(parent instanceof HTMLElement)) throw new TypeError(`"${parent}" is not an HTMLElement.`)
 
-        parent.insertAdjacentHTML('beforeend', Filter.__filter_getHTML(name))
+        parent.insertAdjacentHTML('beforeend', filter_getHTML(name))
     }
 
-    #filter_setVars(parent) { this.#filter = parent.lastElementChild }
+    function filter_setVars() { filter = parent.lastElementChild }
 
-    #filter_setEvents()
+    function filter_setEvents()
     {
         events_add(
         {
-            resize: this.#filter_e$Resize.bind(this),
-            click : this.#filter_e$Click .bind(this)
+            resize: filter_e$Resize,
+            click : filter_e$Click
         })
 
-        this.#filter.addEventListener('research', this.#filter_eResearch.bind(this))
+        filter.addEventListener('research', filter_eResearch)
     }
 
 
-    #controler_set()
+    function controler_set()
     {
-        this.#controler_setVars()
-        this.#controler_setEvents()
+        controler_setVars()
+        controler_setEvents()
     }
 
-    #controler_setVars() { this.#controler = this.#filter.querySelector('.controler') }
+    function controler_setVars() { controler = filter.querySelector('.controler') }
 
-    #controler_setEvents() { this.#controler.addEventListener('click', this.#controler_eClick.bind(this)) }
+    function controler_setEvents() { controler.addEventListener('click', controler_eClick) }
 
 
-    #wrapper_set()
+    function wrapper_set()
     {
-        this.#wrapper_setVars()
-        this.#wrapper_updateHeightVars()
+        wrapper_setVars()
+        wrapper_updateHeightVars()
     }
 
-    #wrapper_setVars() { this.#wrapper = this.#filter.querySelector('.wrapper') }
+    function wrapper_setVars() { wrapper = filter.querySelector('.wrapper') }
 
 
-    #options_set()
+    function input_set() { input_setVars() }
+
+    function input_setVars() { input_reset = searchbar()(filter) }
+
+
+    function options_set()
     {
-        this.#options_setVars()
-        this.#options_updateTopVars()
+        options_setVars()
+        options_updateTopVars()
     }
     
-    #options_setVars() { this.#options = this.#filter.querySelector('.options') }
+    function options_setVars() { options = filter.querySelector('.options') }
 
 
-    #option_set(ref, option = '')
+    function option_set(ref, option = '')
     {
-        this.#option_setHTML(option)
+        option_setHTML(option)
 
-        const OPTION = this.#options.lastElementChild.querySelector('.option')
+        const OPTION = options.lastElementChild.querySelector('.option')
 
-        this.#option_setParasites(OPTION, ref)
-        this.#option_setEvents(OPTION)
+        option_setParasites(OPTION, ref)
+        option_setEvents(OPTION)
 
         return OPTION
     }
 
-    #option_setHTML() { this.#options.insertAdjacentHTML('beforeend', Filter.__option_getHTML(...arguments)) }
+    function option_setHTML() { options.insertAdjacentHTML('beforeend', option_getHTML(...arguments)) }
 
-    #option_setParasites(e, ref)
+    function option_setParasites(e, ref)
     {
         e.option_ACTIVE = false
         e.option_REF    = ref
     }
 
-    #option_setEvents(e) { e.addEventListener('click', Filter.__option_eClick.bind(e)) }
+    function option_setEvents(e) { e.addEventListener('click', option_eClick.bind(e)) }
 
     // __GET
-    static __filter_getHTML(name = '')
+    function filter_getHTML(name = '')
     {
         return `
             <li
@@ -278,19 +267,19 @@ class Filter extends Searchbar
     }
 
 
-    #options_getRef(ref = '')
+    function options_getRef(ref = '')
     {
         let found
 
-        Filter.__filter_REFS.forEach(r => { if (r.ref === ref) return found = r })
+        FILTER_REFS.forEach(r => { if (r.ref === ref) return found = r })
 
         return found
     }
 
-    #options_getRefs() { return new Set(this.#options_OPTIONS.keys()) }
+    function options_getRefs() { return new Set(options_OPTIONS.keys()) }
 
 
-    static __option_getHTML(option = '')
+    function option_getHTML(option = '')
     {
         const OPTION = option.at(0).toUpperCase() + option.slice(1).toLowerCase()
 
@@ -314,7 +303,7 @@ class Filter extends Searchbar
     }
 
 
-    static __cross_getHTML()
+    function cross_getHTML()
     {
         return `
             <i
@@ -347,56 +336,56 @@ class Filter extends Searchbar
     }
 
     // __UPDATES
-    #filter_updateStyle()
+    function filter_updateStyle()
     {
         requestAnimationFrame(() =>
         {
             const
-            STYLE  = this.#filter.style,
-            CLIP_Y = this.#options_TOP + this.#options.getBoundingClientRect().height
+            STYLE  = filter.style,
+            CLIP_Y = options_TOP + options.getBoundingClientRect().height
 
             STYLE.setProperty('--filter_clip_y'         ,                         CLIP_Y + 'px')
-            STYLE.setProperty('--background_translate_y', -this.#wrapper_HEIGHT + CLIP_Y + 'px')
+            STYLE.setProperty('--background_translate_y', -wrapper_HEIGHT + CLIP_Y + 'px')
         })
     }
 
 
-    #controler_update()
+    function controler_update()
     {
-        const PRESSED = !this.#controler.controler_PRESSED
+        const PRESSED = !controler.controler_PRESSED
 
-        if   (PRESSED) this.#options_sort()
+        if   (PRESSED) options_sort()
         else
         {
-            this.#options_updateCurrentRefs()
-            this.input_reset()
+            options_updateCurrentRefs()
+            input_reset()
         }
 
-        this.#controler_updateProprerties(PRESSED)
+        controler_updateProprerties(PRESSED)
     }
 
-    #controler_updateProprerties(pressed = false) { this.#controler.ariaPressed = this.#controler.controler_PRESSED = pressed }
+    function controler_updateProprerties(pressed = false) { controler.ariaPressed = controler.controler_PRESSED = pressed }
 
 
-    #wrapper_updateHeightVars() { this.#wrapper_HEIGHT = this.#wrapper.offsetHeight }
+    function wrapper_updateHeightVars() { wrapper_HEIGHT = wrapper.offsetHeight }
 
 
-    #options_update(ref, recipe, option = '', words = '')
+    function options_update(ref, recipe, option = '', words = '')
     {
-        this.#options_CURRENT_REFS.add(ref)
+        options_CURRENT_REFS.add(ref)
 
-        this.#options_OPTIONS.set(ref, { element: this.#option_set(ref, option), recipes: new Set([recipe]) })
+        options_OPTIONS.set(ref, { element: option_set(ref, option), recipes: new Set([recipe]) })
 
-        this.#options_TREE.tree_addWords(words.split(' '), ref)
+        options_TREE.tree_addWords(words.split(' '), ref)
     }
 
-    #options_updateOptionsDisplay(options = new Map(), action = 'remove') { for (let [_, {element}] of options) this.#option_updateDisplay(element, action) }
+    function options_updateOptionsDisplay(options = new Map(), action = 'remove') { for (let [_, {element}] of options) option_updateDisplay(element, action) }
 
-    #options_updateTopVars() { this.#options_TOP = this.#options.offsetTop }
+    function options_updateTopVars() { options_TOP = options.offsetTop }
 
-    #options_updateCurrentRefs(words = '')
+    function options_updateCurrentRefs(words = '')
     {
-        const REFS = this.#options_getRefs()
+        const REFS = options_getRefs()
 
         if (words)
         {
@@ -406,7 +395,7 @@ class Filter extends Searchbar
             {
                 const
                 WORD  = WORDS[i],
-                MATCH = this.#options_TREE.tree_match(WORD)
+                MATCH = options_TREE.tree_match(WORD)
     
                 if (!MATCH) { REFS.clear() ;break }
     
@@ -414,91 +403,91 @@ class Filter extends Searchbar
             }
         }
 
-        this.#options_CURRENT_REFS = REFS
+        options_CURRENT_REFS = REFS
     }
 
 
-    #option_update(ref, remove = false)
+    function option_update(ref, remove = false)
     {
-        let {element} = this.#options_OPTIONS.get(ref) ?? {}
+        let {element} = options_OPTIONS.get(ref) ?? {}
 
         if (!element) return
     
-        this.#option_updateHTML(element, remove)
-        this.#option_updateProperties(element, !remove)
+        option_updateHTML(element, remove)
+        option_updateProperties(element, !remove)
     }
 
-    #option_updateHTML(e, remove = false) { remove ? e.querySelector('.cross')?.remove() : e.insertAdjacentHTML('beforeend', Filter.__cross_getHTML()) }
+    function option_updateHTML(e, remove = false) { remove ? e.querySelector('.cross')?.remove() : e.insertAdjacentHTML('beforeend', cross_getHTML()) }
 
-    #option_updateProperties(e, active = false)
+    function option_updateProperties(e, active = false)
     {
         e.option_ACTIVE = active
         e.classList      [active ? 'add' : 'remove']('active')
     }
 
-    #option_updateDisplay(e, action = 'remove') { e?.classList[action]('d_non') }
+    function option_updateDisplay(e, action = 'remove') { e?.classList[action]('d_non') }
 
     // __EVENTS
-    #filter_e$Resize()
+    function filter_e$Resize()
     {
-        this.#wrapper_updateHeightVars()
-        this.#options_updateTopVars()
+        wrapper_updateHeightVars()
+        options_updateTopVars()
     }
 
-    #filter_e$Click({target})
+    function filter_e$Click({target})
     {
-        if (!this.#controler.controler_PRESSED) return
+        if (!controler.controler_PRESSED) return
         
         while (target)
         {
-            if (target === document.body || target === document.documentElement) return this.#controler_update()
-            if (target === this.#filter                                        ) return
+            if (target === document.body || target === document.documentElement) return controler_update()
+            if (target === filter                                              ) return
 
             target = target.parentNode
         }
     }
     
-    #filter_eResearch(e)
+    function filter_eResearch(e)
     {
         e.stopPropagation()
 
-        this.#options_updateCurrentRefs(e.detail.value)
-        this.#options_sort()
+        options_updateCurrentRefs(e.detail.value)
+        options_sort()
     }
 
 
-    #controler_eClick() { this.#controler_update() }
+    function controler_eClick() { controler_update() }
 
 
-    static __option_eClick() { Filter.__filter_$STORE.update(this.option_REF, this.option_ACTIVE ?? false, this.dataset.option) }
+    function option_eClick() { FILTER_$STORE.update(this.option_REF, this.option_ACTIVE ?? false, this.dataset.option) }
 
     // __UTILS
-    options_add(options = [], compressedOptions, recipe)
+    function options_add(options = [], compressedOptions, recipe)
     {
-        const OPTIONS = this.#options_OPTIONS
+        const OPTIONS = options_OPTIONS
 
         options.forEach((option, i) =>
         {
             const
             COMPRESSED = compressedOptions[i],
-            REF        = this.#options_getRef(COMPRESSED) ?? new Ref(COMPRESSED)
+            REF        = options_getRef(COMPRESSED) ?? new Ref(COMPRESSED)
 
             if   (OPTIONS.has(REF)) OPTIONS.get(REF).recipes.add(recipe)
             else
             {
-                Filter.__filter_REFS.add(REF)
+                FILTER_REFS.add(REF)
     
-                this.#options_update(REF, recipe, option, COMPRESSED)
+                options_update(REF, recipe, option, COMPRESSED)
             }
         })
     }
 
-    #options_sort(recipes)
+    function options_sort(recipes)
     {
         const
-        RECIPES = recipes ?? Recipe.__recipe_$STORE.get(),
-        REFS    = this.#options_CURRENT_REFS,
-        OPTIONS = new Map(this.#options_OPTIONS)
+        RECIPES = recipes ?? RECIPE_$STORE.get(),
+        REFS    = options_CURRENT_REFS,
+        OPTIONS = new Map(options_OPTIONS)
 
         let removes = true
 
@@ -510,13 +499,13 @@ class Filter extends Searchbar
             {
                 OPTIONS.delete(ref)
 
-                this.#option_updateDisplay(element, 'add')
+                option_updateDisplay(element, 'add')
             }
             else removes = true
         })
 
-        this.#options_updateOptionsDisplay(OPTIONS, 'remove')
-        this.#filter_updateStyle()
+        options_updateOptionsDisplay(OPTIONS, 'remove')
+        filter_updateStyle()
     }
 
 
@@ -526,4 +515,18 @@ class Filter extends Searchbar
 // #\_EXPORTS_\
 
     // __THIS
-    export default Filter
+    export default filter
+
+    export const
+    FILTER_$STORE = (() =>
+    {
+        const SUBSCRIBERS = new Set()
+
+        function update(ref, remove = false, option = '') { SUBSCRIBERS.forEach(subscriber => subscriber(ref, remove, option)) }
+
+        function subscribe(f) { if (f instanceof Function) SUBSCRIBERS.add(f) }
+
+        return {update, subscribe}
+    })(),
+    FILTER_FILTERS = new Map(),
+    FILTER_REFS    = new Set()

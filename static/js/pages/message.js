@@ -4,7 +4,7 @@
 // #\_IMPORTS_\
 
     // __JS
-    import Recipe from '../components/Recipe.js'
+    import { RECIPE_$STORE } from '../components/recipe.js'
 
 
 // #\_CONSTANTES_\
@@ -20,7 +20,7 @@
     {
         message_updateTextContent()
 
-        Recipe.__recipe_$STORE.subscribe(message_updateDisplay)
+        RECIPE_$STORE.subscribe(message_updateDisplay)
     }
 
     // __UPDATES

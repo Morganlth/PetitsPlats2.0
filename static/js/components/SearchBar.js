@@ -1,4 +1,4 @@
-/* #||__[SearchBar]__|| */
+/* #||__[searchbar]__|| */
 
 
 // #\_IMPORTS_\
@@ -7,130 +7,135 @@
     import { str_compressed } from '../utils/str.js'
 
 
-class SearchBar
+function searchbar()
 {
 
 // #\_PROPS_\
 
     // __PRIVATES
-    #searchbar
-    #searchbar_BUBBLES = false
+    let
+    searchbar,
+    searchbar_BUBBLES = false
 
-    #form
+    let form
 
-    #input
-    #input_VALUE = ''
+    let
+    input,
+    input_VALUE = ''
 
-    #deleter
+    let deleter
 
-    #sender
+    let sender
 
 
 // #\_FUNCTIONS_\
 
     // __SET
-    searchbar_set()
+    function searchbar_set()
     {
-        this.#searchbar_setVars(...arguments)
-        this.#form_set()
-        this.#input_set()
-        this.#deleter_set()
-        this.#sender_set()
+        searchbar_setVars(...arguments)
+        form_set()
+        input_set()
+        deleter_set()
+        sender_set()
+
+        return input_reset
     }
 
-    #searchbar_setVars(searchbar, bubbles = false) 
+    function searchbar_setVars(sb, bubbles = false) 
     {
-        if (!(searchbar instanceof HTMLElement)) throw new TypeError(`"${searchbar}" is not an HTMLElement.`)
+        if (!(sb instanceof HTMLElement)) throw new TypeError(`"${sb}" is not an HTMLElement.`)
 
-        this.#searchbar         = searchbar
-        this.#searchbar_BUBBLES = bubbles
+        searchbar         = sb
+        searchbar_BUBBLES = bubbles
     }
 
 
-    #form_set()
+    function form_set()
     {
-        this.#form_setVars()
-        this.#form_setEvents()
+        form_setVars()
+        form_setEvents()
     }
 
-    #form_setVars() { this.#form = this.#searchbar instanceof HTMLFormElement ? this.#searchbar : this.#searchbar.querySelector('form') }
+    function form_setVars() { form = searchbar instanceof HTMLFormElement ? searchbar : searchbar.querySelector('form') }
 
-    #form_setEvents() { this.#form?.addEventListener('submit', SearchBar.__form_eSubmit) }
+    function form_setEvents() { form?.addEventListener('submit', form_eSubmit) }
 
 
-    #input_set()
+    function input_set()
     {
-        this.#input_setVars()
-        this.#input_setEvents()
+        input_setVars()
+        input_setEvents()
     }
 
-    #input_setVars() { this.#input = this.#searchbar.querySelector('input[type="search"]') }
+    function input_setVars() { input = searchbar.querySelector('input[type="search"]') }
 
-    #input_setEvents() { this.#input?.addEventListener('input', this.#input_eInput.bind(this)) }
+    function input_setEvents() { input?.addEventListener('input', input_eInput) }
 
 
-    #deleter_set()
+    function deleter_set()
     {
-        this.#deleter_setVars()
-        this.#deleter_setEvents()
+        deleter_setVars()
+        deleter_setEvents()
     }
 
-    #deleter_setVars() { this.#deleter = this.#searchbar.querySelector('.deleter') }
+    function deleter_setVars() { deleter = searchbar.querySelector('.deleter') }
 
-    #deleter_setEvents() { this.#deleter?.addEventListener('click', this.#deleter_eClick.bind(this)) }
+    function deleter_setEvents() { deleter?.addEventListener('click', deleter_eClick) }
 
 
-    #sender_set()
+    function sender_set()
     {
-        this.#sender_setVars()
-        this.#sender_setEvents()
+        sender_setVars()
+        sender_setEvents()
     }
 
-    #sender_setVars() { this.#sender = this.#searchbar.querySelector('.sender') }
+    function sender_setVars() { sender = searchbar.querySelector('.sender') }
 
-    #sender_setEvents() { this.#sender?.addEventListener('click', this.#sender_eClick.bind(this)) }
+    function sender_setEvents() { sender?.addEventListener('click', sender_eClick) }
 
     // __EVENTS
-    static __form_eSubmit(e) { e.preventDefault() }
+    function form_eSubmit(e) { e.preventDefault() }
 
-    #input_eInput()
+    function input_eInput()
     {
-        const VALUE = str_compressed(this.#input.value)
+        const VALUE = str_compressed(input.value)
 
-        if (VALUE !== this.#input_VALUE)
+        if (VALUE !== input_VALUE)
         {
-            this.#input_VALUE = VALUE
+            input_VALUE = VALUE
 
-            this.#searchbar_dispatchResearch()
+            searchbar_dispatchResearch()
         }
 
-        if (this.#searchbar_BUBBLES) this.#searchbar_dispatchInput()
+        if (searchbar_BUBBLES) searchbar_dispatchInput()
     }
 
-    #deleter_eClick()
+    function deleter_eClick()
     {
-        this.input_reset()
-        this.#searchbar_dispatchResearch()
+        input_reset()
+        searchbar_dispatchResearch()
     }
 
-    #sender_eClick()
+    function sender_eClick()
     {
-        this.#searchbar_dispatchResearch()
-        this.input_reset()
+        searchbar_dispatchResearch()
+        input_reset()
     }
 
     // __UTILS
-    #searchbar_dispatchInput() { this.#searchbar?.dispatchEvent(new CustomEvent('writing', { bubbles: true, detail: { value: this.#input.value }})) }
+    function searchbar_dispatchInput() { searchbar?.dispatchEvent(new CustomEvent('writing', { bubbles: true, detail: { value: input.value }})) }
 
-    #searchbar_dispatchResearch() { this.#searchbar?.dispatchEvent(new CustomEvent('research', { bubbles: true, detail: { value: this.#input_VALUE }})) }
+    function searchbar_dispatchResearch() { searchbar?.dispatchEvent(new CustomEvent('research', { bubbles: true, detail: { value: input_VALUE }})) }
 
-    input_reset() { if (this.#input) this.#input_VALUE = this.#input.value = '' }
+    function input_reset() { if (input) input_VALUE = input.value = '' }
 
 
+    return searchbar_set
 }
 
 
 // #\_EXPORTS_\
 
     // __THIS
-    export default SearchBar
+    export default searchbar

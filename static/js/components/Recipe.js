@@ -1,126 +1,93 @@
-/* #||__[Recipe]__|| */
+/* #||__[recipe]__|| */
 
 
 // #\_IMPORTS_\
 
     // __JS
-    import Filter             from './Filter.js'
+    import { FILTER_FILTERS } from './filter.js'
     import Tree               from '../templates/Tree.js'
     import { str_compressed } from '../utils/str.js'
     import { wait_debounce  } from '../utils/wait.js'
 
 
-class Recipe
+function recipe()
 {
 
 // #\_PROPS_\
 
-    // __STATICS
-    static __recipe_$STORE = (() =>
-    {
-        const SUBSCRIBERS = []
-
-        let recipes = new Set()
-
-        const call = wait_debounce(() => { SUBSCRIBERS.forEach(subscriber => subscriber(recipes)) }, 3)
-
-        function set(recipes2 = new Set())
-        {
-            recipes = recipes2
-
-            call()
-        }
-
-        function get() { return recipes }
-
-        function update(recipe)
-        {
-            if (recipe instanceof Recipe) recipes.add(recipe)
-
-            call()
-        }
-
-        function subscribe(f) { if (f instanceof Function && !~SUBSCRIBERS.indexOf(f)) SUBSCRIBERS.push(f) }
-
-        return {set, get, update, subscribe}
-    })()
-
-    static __recipe_TREE    = new Tree()
-    static __recipe_FILTERS = ['Ingredients', 'Appareils', 'Ustensiles']
-
     // __PRIVATES
-    #recipe
-    #recipe_NAME        = ''
-    #recipe_DESCRIPTION = ''
-    #recipe_APPLIANCE   = ''
-    #recipe_INGREDIENTS = []
-    #recipe_USTENSILS   = []
+    const RECIPE = { updateDisplay: recipe_updateDisplay }
+
+    let
+    recipe,
+    recipe_NAME        = '',
+    recipe_DESCRIPTION = '',
+    recipe_APPLIANCE   = '',
+    recipe_INGREDIENTS = [],
+    recipe_USTENSILS   = []
 
 
 // #\_CONSTRUCTOR_\
 
     // __THIS
-    constructor ()
-    {
-        Recipe.__recipe_$STORE.update(this)
+    RECIPE_$STORE.update(RECIPE)
 
-        this.#recipe_set(...arguments)
-    }
+    recipe_set(...arguments)
 
 
 // #\_FUNCTIONS_\
 
     // __SET
-    #recipe_set()
+    function recipe_set()
     {
-        this.#recipe_setHTML(...arguments)
-        this.#recipe_setVars(...arguments)
+        recipe_setHTML(...arguments)
+        recipe_setVars(...arguments)
 
         ;[
-            [null                      , this.#recipe_NAME                                         ],
-            [null                      , this.#recipe_DESCRIPTION                                  ],
-            [Recipe.__recipe_FILTERS[0], this.#recipe_INGREDIENTS.map(({ingredient}) => ingredient)],
-            [Recipe.__recipe_FILTERS[1], this.#recipe_APPLIANCE                                    ],
-            [Recipe.__recipe_FILTERS[2], this.#recipe_USTENSILS                                    ]
+            [null             , recipe_NAME                                         ],
+            [null             , recipe_DESCRIPTION                                  ],
+            [RECIPE_FILTERS[0], recipe_INGREDIENTS.map(({ingredient}) => ingredient)],
+            [RECIPE_FILTERS[1], recipe_APPLIANCE                                    ],
+            [RECIPE_FILTERS[2], recipe_USTENSILS                                    ]
         ]
-        .forEach(this.#recipe_setKeywords, this)
+        .forEach(recipe_setKeywords)
     }
 
-    #recipe_setHTML(parent, {time, image, name, description, ingredients})
+    function recipe_setHTML(parent, {time, image, name, description, ingredients})
     {
         if (!(parent instanceof HTMLElement)) throw new TypeError(`"${parent}" is not an HTMLElement.`)
 
-        parent.insertAdjacentHTML('beforeend', Recipe.__recipe_getHTML(image, name, time, description, ingredients))
+        parent.insertAdjacentHTML('beforeend', recipe_getHTML(image, name, time, description, ingredients))
     }
 
-    #recipe_setVars(parent, {name, description, appliance, ingredients, ustensils})
+    function recipe_setVars(parent, {name, description, appliance, ingredients, ustensils})
     {
-        this.#recipe             = parent.lastElementChild
-        this.#recipe_NAME        = name
-        this.#recipe_DESCRIPTION = description
-        this.#recipe_APPLIANCE   = appliance
-        this.#recipe_INGREDIENTS = ingredients
-        this.#recipe_USTENSILS   = ustensils
+        recipe             = parent.lastElementChild
+        recipe_NAME        = name
+        recipe_DESCRIPTION = description
+        recipe_APPLIANCE   = appliance
+        recipe_INGREDIENTS = ingredients
+        recipe_USTENSILS   = ustensils
     }
 
-    #recipe_setKeywords([filter = '', value = '' || []])
+    function recipe_setKeywords([filter = '', value = '' || []])
     {
         let filter_COMPRESSED_OPTIONS = []
 
-        if (Filter.__filter_FILTERS.has(filter))
+        if (FILTER_FILTERS.has(filter))
         {
             const FILTER_OPTIONS = value instanceof Array ? value : [value]
 
             filter_COMPRESSED_OPTIONS = FILTER_OPTIONS.map(s => str_compressed(s))
     
-            Filter.__filter_FILTERS.get(filter).options_add(FILTER_OPTIONS, filter_COMPRESSED_OPTIONS, this)
+            FILTER_FILTERS.get(filter)(FILTER_OPTIONS, filter_COMPRESSED_OPTIONS, RECIPE)
         }
 
-        Recipe.__recipe_TREE.tree_addWords([...str_compressed(value).split(' '), ...filter_COMPRESSED_OPTIONS], this)
+        RECIPE_TREE.tree_addWords([...str_compressed(value).split(' '), ...filter_COMPRESSED_OPTIONS], RECIPE)
     }
 
     // __GET
-    static __recipe_getHTML(image, name, time, description, ingredients)
+    function recipe_getHTML(image, name, time, description, ingredients)
     {
         return `
             <article
@@ -190,7 +157,7 @@ class Recipe
                                                     <span
                                                     class="quantity d_blc c_itm fw_400"
                                                     >
-                                                        ${quantity + (unit ? Recipe.__recipe_getUnit(unit) ?? ' ' + unit : '')}
+                                                        ${quantity + (unit ? recipe_getUnit(unit) ?? ' ' + unit : '')}
                                                     </span>
                                                 `
                                                 : ''
@@ -208,7 +175,7 @@ class Recipe
         `
     }
 
-    static __recipe_getUnit(unit)
+    function recipe_getUnit(unit)
     {
         switch (unit)
         {
@@ -229,13 +196,46 @@ class Recipe
     }
 
     // __UPDATES
-    recipe_updateDisplay(action = 'remove') { this.#recipe.classList[action]('d_non') }
+    function recipe_updateDisplay(action = 'remove') { recipe.classList[action]('d_non') }
 
 
+    return RECIPE
 }
 
 
 // #\_EXPORTS_\
 
     // __THIS
-    export default Recipe
+    export default recipe
+
+    export const
+    RECIPE_$STORE = (() =>
+    {
+        const SUBSCRIBERS = []
+
+        let recipes = new Set()
+
+        const call = wait_debounce(() => { SUBSCRIBERS.forEach(subscriber => subscriber(recipes)) }, 3)
+
+        function set(recipes2 = new Set())
+        {
+            recipes = recipes2
+
+            call()
+        }
+
+        function get() { return recipes }
+
+        function update(recipe)
+        {
+            if (recipe instanceof Object) recipes.add(recipe)
+
+            call()
+        }
+
+        function subscribe(f) { if (f instanceof Function && !~SUBSCRIBERS.indexOf(f)) SUBSCRIBERS.push(f) }
+
+        return {set, get, update, subscribe}
+    })(),
+    RECIPE_TREE    = new Tree(),
+    RECIPE_FILTERS = ['Ingredients', 'Appareils', 'Ustensiles']

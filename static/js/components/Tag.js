@@ -1,75 +1,73 @@
-/* #||__[Tag]__|| */
+/* #||__[tag]__|| */
 
 
 // #\_IMPORTS_\
 
     // __JS
-    import Filter from './Filter.js'
+    import { FILTER_$STORE } from './filter.js'
 
 
-class Tag
+function tag()
 {
 
 // #\_PROPS_\
 
     // __PRIVATES
-    #tag
-    #tag_REF
+    let
+    tag,
+    tag_REF
 
-    #deleter
+    let deleter
 
 
 // #\_CONSTRUCTOR_\
 
     // __THIS
-    constructor () { this.#tag_set(...arguments) }
+    tag_set(...arguments)
 
 
 // #\_FUNCTIONS_\
 
     // __SET
-    #tag_set(parent, ref, tag = '')
+    function tag_set(parent, ref, name = '')
     {
-        this.#tag_setHTML(parent, tag)
-        this.#tag_setVars(parent, ref)
-        this.#deleter_set()
+        tag_setHTML(parent, name)
+        tag_setVars(parent, ref)
+        deleter_set()
     }
 
-    #tag_setHTML(parent, tag)
+    function tag_setHTML(parent, name)
     {
         if (!(parent instanceof HTMLElement)) throw new TypeError(`"${parent}" is not an HTMLElement.`)
 
-        parent.insertAdjacentHTML('beforeend', Tag.__tag_getHTML(tag))
+        parent.insertAdjacentHTML('beforeend', tag_getHTML(name))
     }
 
-    #tag_setVars(parent, ref)
+    function tag_setVars(parent, ref)
     {
-        this.#tag     = parent.lastElementChild
-        this.#tag_REF = ref
+        tag     = parent.lastElementChild
+        tag_REF = ref
     }
 
 
-    #deleter_set()
+    function deleter_set()
     {
-        this.#deleter_setBinding()
-        this.#deleter_setVars()
-        this.#deleter_setEvents()
+        deleter_setVars()
+        deleter_setEvents()
     }
 
-    #deleter_setBinding() { this.deleter_eClick = this.deleter_eClick.bind(this) }
+    function deleter_setVars() { deleter = tag.querySelector('.deleter') }
 
-    #deleter_setVars() { this.#deleter = this.#tag.querySelector('.deleter') }
-
-    #deleter_setEvents() { this.#deleter?.addEventListener('click', this.deleter_eClick) }
+    function deleter_setEvents() { deleter?.addEventListener('click', deleter_eClick) }
 
     // __GET
-    static __tag_getHTML(tag)
+    function tag_getHTML(name = '')
     {
         return `
             <li
             class="tag d_flx j_sbt a_ctr b_prm brd_r_10 super_item"
             >
-                ${tag}
+                ${name}
 
                 <button
                 class="deleter"
@@ -101,26 +99,27 @@ class Tag
     }
 
     // __DESTROY
-    tag_destroy()
+    function tag_destroy()
     {
-        this.#deleter_destroy()
+        deleter_destroy()
 
-        this.#tag.remove()
+        tag.remove()
     }
 
 
-    #deleter_destroy() { this.#deleter_destroyEvents() }
+    function deleter_destroy() { deleter_destroyEvents() }
 
-    #deleter_destroyEvents() { this.#deleter?.removeEventListener('click', this.deleter_eClick) }
+    function deleter_destroyEvents() { deleter?.removeEventListener('click', deleter_eClick) }
 
     // __EVENTS
-    deleter_eClick() { Filter.__filter_$STORE.update(this.#tag_REF, true) }
+    function deleter_eClick() { FILTER_$STORE.update(tag_REF, true) }
 
 
+    return tag_destroy
 }
 
 
 // #\_EXPORTS_\
 
     // __THIS
-    export default Tag
+    export default tag
