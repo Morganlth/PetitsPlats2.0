@@ -18,13 +18,13 @@ class Tree
     // __UTILS
     tree_addWords(words = [], ref)
     {
-        for (let i = 0; i < words.length; i++)
+        for (let i = 0, iMax = words.length; i < iMax; i++)
         {
             const WORD = words[i]
 
             let node = this.#tree_TREE
     
-            for (let j = 0; j < WORD.length; j++)
+            for (let j = 0, jMax = WORD.length; j < jMax; j++)
             {
                 const CHAR = WORD[j]
     
@@ -41,7 +41,7 @@ class Tree
     {
         let node = this.#tree_TREE
     
-        for (let i = 0; i < word.length; i++)
+        for (let i = 0, max = word.length; i < max; i++)
         {
             const CHAR = word[i]
     

@@ -4,10 +4,11 @@
 // #\_IMPORTS_\
 
     // __JS
-    import Filter             from './Filter.js'
-    import Tree               from '../templates/Tree.js'
-    import { str_compressed } from '../utils/str.js'
-    import { wait_debounce  } from '../utils/wait.js'
+    import Filter                                    from './Filter.js'
+    import Tree                                      from '../templates/Tree.js'
+    import { str_compressed                        } from '../utils/str.js'
+    import { wait_debounce                         } from '../utils/wait.js'
+    import { array_includes, array_map, array_push } from '../utils/array.js'
 
 
 class Recipe
@@ -22,7 +23,7 @@ class Recipe
 
         let recipes = new Set()
 
-        const call = wait_debounce(() => { for (let i = 0; i < SUBSCRIBERS.length; i++) SUBSCRIBERS[i](recipes) }, 3)
+        const call = wait_debounce(() => { for (let i = 0, max = SUBSCRIBERS.length; i < max; i++) SUBSCRIBERS[i](recipes) }, 3)
 
         function set(recipes2 = new Set())
         {
@@ -40,7 +41,7 @@ class Recipe
             call()
         }
 
-        function subscribe(f) { if (f instanceof Function && !~SUBSCRIBERS.indexOf(f)) SUBSCRIBERS.push(f) }
+        function subscribe(f) { if (f instanceof Function && !array_includes(SUBSCRIBERS, f)) array_push(SUBSCRIBERS, f) }
 
         return {set, get, update, subscribe}
     })()
@@ -76,15 +77,16 @@ class Recipe
         this.#recipe_setHTML(...arguments)
         this.#recipe_setVars(...arguments)
 
-        for (const [FILTER, VALUE] of
+        const ITER =
         [
-            [null                      , this.#recipe_NAME                                         ],
-            [null                      , this.#recipe_DESCRIPTION                                  ],
-            [Recipe.__recipe_FILTERS[0], this.#recipe_INGREDIENTS.map(({ingredient}) => ingredient)],
-            [Recipe.__recipe_FILTERS[1], this.#recipe_APPLIANCE                                    ],
-            [Recipe.__recipe_FILTERS[2], this.#recipe_USTENSILS                                    ]
-        ])
-        this.#recipe_setKeywords(FILTER, VALUE)
+            [null                      , this.#recipe_NAME                                                ],
+            [null                      , this.#recipe_DESCRIPTION                                         ],
+            [Recipe.__recipe_FILTERS[0], array_map(this.#recipe_INGREDIENTS, ({ingredient}) => ingredient)],
+            [Recipe.__recipe_FILTERS[1], this.#recipe_APPLIANCE                                           ],
+            [Recipe.__recipe_FILTERS[2], this.#recipe_USTENSILS                                           ]
+        ]
+
+        for (let i = 0, max = ITER.length; i < max; i++) this.#recipe_setKeywords(...ITER[i])
     }
 
     #recipe_setHTML(parent, {time, image, name, description, ingredients})
@@ -112,7 +114,7 @@ class Recipe
         {
             const FILTER_OPTIONS = value instanceof Array ? value : [value]
 
-            filter_COMPRESSED_OPTIONS = FILTER_OPTIONS.map(s => str_compressed(s))
+            filter_COMPRESSED_OPTIONS = array_map(FILTER_OPTIONS, s => str_compressed(s))
     
             Filter.__filter_FILTERS.get(filter).options_add(FILTER_OPTIONS, filter_COMPRESSED_OPTIONS, this)
         }

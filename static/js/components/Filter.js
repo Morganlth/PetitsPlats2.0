@@ -395,7 +395,7 @@ class Filter extends Searchbar
         {
             const WORDS = words.split(' ')
     
-            for (let i = 0; i < WORDS.length; i++)
+            for (let i = 0, max = WORDS.length; i < max; i++)
             {
                 const
                 WORD  = WORDS[i],
@@ -470,7 +470,7 @@ class Filter extends Searchbar
     {
         const OPTIONS = this.#options_OPTIONS
 
-        for (let i = 0; i < options.length; i++)
+        for (let i = 0, max = options.length; i < max; i++)
         {
             const
             COMPRESSED = compressedOptions[i],

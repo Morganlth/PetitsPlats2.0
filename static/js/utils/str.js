@@ -6,6 +6,8 @@
     // __JS
     import { CONFIG_WORD_MIN_LENGTH } from '../config.js'
 
+    import { array_reduce } from '../utils/array.js'
+
 
 // #\_CONSTANTES_\
 
@@ -26,7 +28,7 @@
         */
 
         return str_normalize((value instanceof Array
-        ?  value.reduce((acc, s) => acc += s + ' ', '')
+        ?  array_reduce(value, (acc, s) => acc += s + ' ', '')
         :  value)
         ?? '')
         .replace(STR_COMPRESSED_REGEX, '')

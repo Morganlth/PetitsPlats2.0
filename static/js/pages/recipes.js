@@ -4,9 +4,10 @@
 // #\_IMPORTS_\
 
     // __JS
-    import Recipe   from '../components/Recipe.js'
-    import Filter   from '../components/Filter.js'
-    import data_get from '../utils/data.js'
+    import Recipe                                                               from '../components/Recipe.js'
+    import Filter                                                               from '../components/Filter.js'
+    import data_get                                                             from '../utils/data.js'
+    import { array_filter, array_indexOf, array_map, array_push, array_splice } from '../utils/array.js'
 
 
 // #\_CONSTANTES_\
@@ -40,7 +41,7 @@
         Filter.__filter_$STORE.subscribe(recipes_updateFilters)
     }
 
-    async function recipes_setVars() { recipes_RECIPES = new Set((await data_get()).map(r => new Recipe(RECIPES, r))) }
+    async function recipes_setVars() { recipes_RECIPES = new Set(array_map(await data_get(), r => new Recipe(RECIPES, r))) }
 
     // __UPDATES
     function recipes_updateDisplay(recipes = new Set(), hidden = false)
@@ -56,15 +57,15 @@
 
         if (remove)
         {
-            const INDEX = recipes_FILTERS.indexOf(FILTER)
+            const INDEX = array_indexOf(recipes_FILTERS, FILTER)
 
             if (~INDEX === 0) return
-    
-            recipes_FILTERS.splice(INDEX, 1)
 
+            recipes_FILTERS = array_splice(recipes_FILTERS, INDEX, 1)
+    
             recipes_resetVars()
         }
-        else recipes_FILTERS.push(FILTER)
+        else array_push(recipes_FILTERS, FILTER)
 
         recipes_sort()
     }
@@ -78,7 +79,7 @@
 
         let hidden = false
 
-        for (let i = 0; i < WORDS.length; i++)
+        for (let i = 0, max = WORDS.length; i < max; i++)
         {
             const
             WORD  = WORDS[i],
@@ -111,7 +112,7 @@
 
         if (LENGTH < recipes_LAST_LENGTH) recipes_resetVars()
 
-        recipes_CURRENT_WORDS = s.split(' ').filter(w => w)
+        recipes_CURRENT_WORDS = array_filter(s.split(' '), w => w)
         recipes_LAST_LENGTH   = LENGTH
     
         recipes_sort()

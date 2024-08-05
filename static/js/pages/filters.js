@@ -37,7 +37,12 @@
     function total_update(recipes = new Set()) { if (TOTAL) TOTAL.textContent = (recipes.size ?? 0) + ' recettes' }
 
     // __UTILS
-    function filter_iter() { for (const FILTER of Recipe.__recipe_FILTERS) new Filter(UL, FILTER) }
+    function filter_iter()
+    {
+        const FILTERS = Recipe.__recipe_FILTERS
+
+        for (let i = 0, max = FILTERS.length; i < max; i++) new Filter(UL, FILTERS[i])
+    }
 
 
 // #\_EXPORTS_\

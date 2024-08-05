@@ -4,7 +4,8 @@
 // #\_IMPORTS_\
 
     // __JS
-    import { wait_debounce } from '../utils/wait.js'
+    import { wait_debounce  } from '../utils/wait.js'
+    import { array_includes } from '../utils/array.js'
 
 
 class Events
@@ -29,9 +30,13 @@ class Events
     #events_set()
     {
         this.#events_setBinding()
+
+        const EVENTS = this.#events_EVENTS
     
-        for (const EVENT of this.#events_EVENTS)
+        for (let i = 0, max = EVENTS.length; i < max; i++)
         {
+            const EVENT = EVENTS[i]
+    
             this.#events_setVars(EVENT)
             this.#events_setEvents(EVENT, this['events_e' + EVENT.at(0).toUpperCase() + EVENT.slice(1)])
         }
@@ -47,11 +52,11 @@ class Events
     events_eResize() { this.#events_call.call(this.#events_MANAGERS.get('resize')) }
 
     // __UTILS
-    async #events_call() { for (const CALLBACK of this) CALLBACK(...arguments) } // this === Array
+    async #events_call() { for (const CALLBACK of this) CALLBACK(...arguments) } // this === Set
 
     #events_testArgs(events) { return events instanceof Object }
 
-    #events_testStringEvent(event = '') { return this.#events_EVENTS.includes(event) }
+    #events_testStringEvent(event = '') { return array_includes(this.#events_EVENTS, event) }
 
     #events_testCallback(callback) { return callback instanceof Function }
 
