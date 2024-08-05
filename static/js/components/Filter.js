@@ -4,11 +4,11 @@
 // #\_IMPORTS_\
 
     // __JS
-    import EVENTS    from '../contexts/Events.js'
-    import Searchbar from './SearchBar.js'
-    import Recipe    from './Recipe.js'
-    import Tree      from '../templates/Tree.js'
-    import Ref       from '../templates/Ref.js'
+    import { events_add } from '../utils/events.js'
+    import Searchbar      from './SearchBar.js'
+    import Recipe         from './Recipe.js'
+    import Tree           from '../templates/Tree.js'
+    import Ref            from '../templates/Ref.js'
 
 
 class Filter extends Searchbar
@@ -87,7 +87,7 @@ class Filter extends Searchbar
 
     #filter_setEvents()
     {
-        EVENTS.events_add(
+        events_add(
         {
             resize: this.#filter_e$Resize.bind(this),
             click : this.#filter_e$Click .bind(this)

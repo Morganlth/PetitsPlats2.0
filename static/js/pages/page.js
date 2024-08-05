@@ -4,8 +4,7 @@
 // #\_IMPORTS_\
 
     // __JS
-    import EVENTS from '../contexts/Events.js'
-
+    import { events_add                              } from '../utils/events.js'
     import { searchbar_init                          } from './searchbar.js'
     import { filters_init                            } from './filters.js'
     import { tags_init                               } from './tags.js'
@@ -23,7 +22,7 @@
 
     function body_setEvents()
     {
-        EVENTS.events_add(
+        events_add(
         {
             'writing' : body_eWriting,
             'research': body_eResearch
